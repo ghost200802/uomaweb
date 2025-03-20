@@ -12,4 +12,15 @@ namespace UomaWeb.Models
         public string id { get; set; }
         public string name { get; set; }
     }
+
+    public class LevelConfig
+    {
+        public Dictionary<string, List<LevelAction>> Levels { get; set; }
+    }
+
+    public class LevelAction
+    {
+        public string id { get; set; }
+        public string name { get; set; }
+    }
 }

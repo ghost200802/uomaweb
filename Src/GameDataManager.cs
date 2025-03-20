@@ -9,6 +9,7 @@ namespace UomaWeb
     public class GameDataManager
     {
         private static ItemConfig _itemConfig;
+        private static LevelConfig _levelConfig;
         private static GameConfig _gameConfig;
         private static UomaGameData _uomaGame;
 
@@ -27,6 +28,7 @@ namespace UomaWeb
             InitializeUomaGameData();
             GameDataManager.LoadGameConfig();
             GameDataManager.LoadItemConfig();
+            GameDataManager.LoadLevelConfig();
         }
 
         public static UomaGameData GetGameState()
@@ -55,6 +57,20 @@ namespace UomaWeb
                 var configPath = Path.Combine(Directory.GetCurrentDirectory(), "config", "items.json");
                 var json = File.ReadAllText(configPath);
                 _itemConfig = JsonConvert.DeserializeObject<ItemConfig>(json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"加载物品配置失败: {ex.Message}");
+            }
+        }
+
+        public static void LoadLevelConfig()
+        {
+            try
+            {
+                var configPath = Path.Combine(Directory.GetCurrentDirectory(), "config", "levels.json");
+                var json = File.ReadAllText(configPath);
+                _levelConfig = JsonConvert.DeserializeObject<LevelConfig>(json);
             }
             catch (Exception ex)
             {
@@ -128,6 +144,59 @@ namespace UomaWeb
                                 VirtualCurrencyPrice = item.VirtualCurrencyPrice,
                                 Stock = item.Stock
                             };
+                        }
+                    }
+                }
+
+                if(gameInfo.GameLevel!= null)
+                {
+                    foreach (var level in gameInfo.GameLevel)
+                    {
+                        if (level?.GameLevelId == null) continue;
+
+                        // 从配置中查找LevelID对应的num
+                        int levelNum = -1;
+                        string levelId = null;
+                        if (_levelConfig?.Levels != null && _levelConfig.Levels.ContainsKey(gameKey))
+                        {   
+                            for (int i = 0; i < _levelConfig.Levels[gameKey].Count; i++)
+                            {
+                                if (_levelConfig.Levels[gameKey][i].id == level.GameLevelId)
+                                {
+                                    levelNum = i;
+                                    levelId = _levelConfig.Levels[gameKey][i].id;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // 确保Levels列表已初始化
+                        if (_uomaGame.Games[gameKey].Levels == null)
+                        {
+                            _uomaGame.Games[gameKey].Levels = new List<GameLevelData>();
+                        }
+
+                        // 如果找到对应的关卡，更新数据；否则添加新关卡
+                        if (levelId != null)
+                        {
+                            if (levelNum < _uomaGame.Games[gameKey].Levels.Count)
+                            {
+                                _uomaGame.Games[gameKey].Levels[levelNum] = new GameLevelData
+                                {
+                                    Id = levelId,
+                                    Name = _levelConfig.Levels[gameKey][levelNum].name,
+                                    IsComplete = level.IsComplete
+                                };
+                            }
+                            else
+                            {
+                                _uomaGame.Games[gameKey].Levels.Add(new GameLevelData
+                                {
+                                    Id = levelId,
+                                    Name = _levelConfig.Levels[gameKey][levelNum].name,
+                                    IsComplete = level.IsComplete
+                                });
+                            }
                         }
                     }
                 }

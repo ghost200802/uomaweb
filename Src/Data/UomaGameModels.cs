@@ -21,6 +21,14 @@ namespace UomaWeb.Models
     public class GameData
     {
         public Dictionary<string, GameItemData> Items { get; set; }
+        public List<GameLevelData> Levels { get; set; }
+    }
+
+    public class GameLevelData
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public int IsComplete { get; set; }
     }
 
     public class GameItemData

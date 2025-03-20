@@ -57,21 +57,21 @@ public class GameApiClient
             };
             var result = JsonConvert.DeserializeObject<ApiResponse<GameInfo>>(responseContent, settings);
 
-            // 输出游戏道具信息
-            if (result?.Data?.GameItem != null)
-            {
-                Console.WriteLine("游戏道具:");
-                foreach (var item in result.Data.GameItem)
-                {
-                    Console.WriteLine($"  道具ID: {item.GameItemId}");
-                    Console.WriteLine($"  道具名称: {item.GameItemName}");
-                    Console.WriteLine($"  道具详情: {item.GameItemDesc}");
-                    Console.WriteLine($"  是否免费: {item.IsFree}");
-                    Console.WriteLine($"  虚拟币价格: {item.VirtualCurrencyPrice}");
-                    Console.WriteLine($"  库存: {item.Stock}");
-                    Console.WriteLine();
-                }
-            }
+            // // 输出游戏道具信息
+            // if (result?.Data?.GameItem != null)
+            // {
+            //     Console.WriteLine("游戏道具:");
+            //     foreach (var item in result.Data.GameItem)
+            //     {
+            //         Console.WriteLine($"  道具ID: {item.GameItemId}");
+            //         Console.WriteLine($"  道具名称: {item.GameItemName}");
+            //         Console.WriteLine($"  道具详情: {item.GameItemDesc}");
+            //         Console.WriteLine($"  是否免费: {item.IsFree}");
+            //         Console.WriteLine($"  虚拟币价格: {item.VirtualCurrencyPrice}");
+            //         Console.WriteLine($"  库存: {item.Stock}");
+            //         Console.WriteLine();
+            //     }
+            // }
         
             if (result == null)
             {
@@ -89,32 +89,32 @@ public class GameApiClient
                 Console.WriteLine($"游戏名称: {result.Data.GameName}");
                 Console.WriteLine($"游戏详情: {result.Data.GameDetail}");
                 
-                if (result.Data.GameLevel?.Count > 0)
-                {
-                    Console.WriteLine("\n游戏关卡:");
-                    foreach (var level in result.Data.GameLevel)
-                    {
-                        Console.WriteLine($"  关卡ID: {level.GameLevelId}");
-                        Console.WriteLine($"  关卡名称: {level.GameLevelName}");
-                        Console.WriteLine($"  是否完成: {level.IsComplete}");
-                        Console.WriteLine();
-                    }
-                }
+                // if (result.Data.GameLevel?.Count > 0)
+                // {
+                //     Console.WriteLine("\n游戏关卡:");
+                //     foreach (var level in result.Data.GameLevel)
+                //     {
+                //         Console.WriteLine($"  关卡ID: {level.GameLevelId}");
+                //         Console.WriteLine($"  关卡名称: {level.GameLevelName}");
+                //         Console.WriteLine($"  是否完成: {level.IsComplete}");
+                //         Console.WriteLine();
+                //     }
+                // }
         
-                if (result.Data.GameItem?.Count > 0)
-                {
-                    Console.WriteLine("游戏道具:");
-                    foreach (var item in result.Data.GameItem)
-                    {
-                        Console.WriteLine($"  道具ID: {item.GameItemId}");
-                        Console.WriteLine($"  道具名称: {item.GameItemName}");
-                        Console.WriteLine($"  道具详情: {item.GameItemDesc}");
-                        Console.WriteLine($"  是否免费: {item.IsFree}");
-                        Console.WriteLine($"  虚拟币价格: {item.VirtualCurrencyPrice}");
-                        Console.WriteLine($"  库存: {item.Stock}");
-                        Console.WriteLine();
-                    }
-                }
+                // if (result.Data.GameItem?.Count > 0)
+                // {
+                //     Console.WriteLine("游戏道具:");
+                //     foreach (var item in result.Data.GameItem)
+                //     {
+                //         Console.WriteLine($"  道具ID: {item.GameItemId}");
+                //         Console.WriteLine($"  道具名称: {item.GameItemName}");
+                //         Console.WriteLine($"  道具详情: {item.GameItemDesc}");
+                //         Console.WriteLine($"  是否免费: {item.IsFree}");
+                //         Console.WriteLine($"  虚拟币价格: {item.VirtualCurrencyPrice}");
+                //         Console.WriteLine($"  库存: {item.Stock}");
+                //         Console.WriteLine();
+                //     }
+                // }
             }
             else
             {

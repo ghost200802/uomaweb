@@ -37,21 +37,21 @@ class Program
                     var games = JsonConvert.DeserializeObject<GameConfig>(gameConfig);
 
                     Console.WriteLine("\n可选游戏列表：");
-                    foreach (var game in games.Games)
+                    var gameList = games.Games.ToList();
+                    for (int i = 0; i < gameList.Count; i++)
                     {
-                        Console.WriteLine($"{game.Key}: {game.Value.name} - {game.Value.description}");
+                        Console.WriteLine($"{i + 1}. {gameList[i].Key}: {gameList[i].Value.name} - {gameList[i].Value.description}");
                     }
 
-                    Console.WriteLine("\n请输入游戏ID（如：CandySweet）：");
-                    var gameId = Console.ReadLine();
-
-                    if (games.Games.ContainsKey(gameId))
+                    Console.WriteLine("\n请输入游戏序号：");
+                    if (int.TryParse(Console.ReadLine(), out int index) && index > 0 && index <= gameList.Count)
                     {
-                        await apiClient.GetGameInfoAsync(games.Games[gameId].id);
+                        var selectedGame = gameList[index - 1];
+                        await apiClient.GetGameInfoAsync(selectedGame.Value.id);
                     }
                     else
                     {
-                        Console.WriteLine("无效的游戏ID");
+                        Console.WriteLine("无效的游戏序号");
                     }
                     break;
 
