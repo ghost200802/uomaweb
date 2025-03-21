@@ -36,6 +36,21 @@ namespace UomaWeb
             return _uomaGame;
         }
 
+        public static GameConfig GetGameConfig()
+        {
+            return _gameConfig;
+        }
+
+        public static ItemConfig GetItemConfig()
+        {
+            return _itemConfig;
+        }
+
+        public static LevelConfig GetLevelConfig()
+        {
+            return _levelConfig;
+        }
+
         public static void LoadGameConfig()
         {
             try
