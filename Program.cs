@@ -10,7 +10,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        var apiClient = new GameApiClient();
+        var apiClient = new GameWebApi();
 
         while (true)
         {
