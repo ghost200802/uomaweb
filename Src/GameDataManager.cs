@@ -142,7 +142,7 @@ namespace UomaWeb
                             {
                                 IsFree = item.IsFree,
                                 VirtualCurrencyPrice = item.VirtualCurrencyPrice,
-                                Stock = item.Stock
+                                GameItemItemNum = item.GameItemItemNum
                             };
                         }
                     }

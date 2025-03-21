@@ -1,153 +1,74 @@
-[
-    {
-        "code": 200,
-        "data": {
-            "gameId": "1900020634239934464",
-            "gameName": "消消乐",
-            "gameImg": [
-                "https://cdn.hkchunce.com/res/shortv/2024/11/22/431e8c97bf2b429b87affc47add68c3b.jpg"
-            ],
-            "gameDetail": "消消乐，越消越快乐",
-            "gameLevel": [
-                {
-                    "gameLevelId": "1900020657178583040",
-                    "gameLevelName": "第一关",
-                    "isComplete": 0
-                },
-                {
-                    "gameLevelId": "1900020659162488832",
-                    "gameLevelName": "第二关",
-                    "isComplete": 0
-                },
-                {
-                    "gameLevelId": "1900020661117034496",
-                    "gameLevelName": "第三关",
-                    "isComplete": 0
-                },
-                {
-                    "gameLevelId": "1900020663079968768",
-                    "gameLevelName": "第四关",
-                    "isComplete": 0
-                },
-                {
-                    "gameLevelId": "1900020665034514432",
-                    "gameLevelName": "第五关",
-                    "isComplete": 0
-                }
-            ],
-            "gameItem": [
-                {
-                    "gameItemId": "1900020666997448704",
-                    "gameItemName": "交换",
-                    "gameItemImg": [
-                        "https: //cdn.hkchunce.com/res/shortv/2024/11/22/3f87fd8788fc41d68a77543364fb3794.jpg"
-                    ],
-                    "gameItemDetail": "交换",
-                    "isFree": 1,
-                    "virtualCurrencyPrice": "0",
-                    "stock": "0"
-                },
-                {
-                    "gameItemId": "1900020669073629184",
-                    "gameItemName": "炸弹",
-                    "gameItemImg": [
-                        "https://cdn.hkchunce.com/res/shortv/2024/11/22/585d876ec3c540a2be8c25415267d220.jpg"
-                    ],
-                    "gameItemDetail": "炸弹",
-                    "isFree": 1,
-                    "virtualCurrencyPrice": "15",
-                    "stock": "0"
-                },
-                {
-                    "gameItemId": "1900020671040757760",
-                    "gameItemName": "消除",
-                    "gameItemImg": [
-                        "https: //cdn.hkchunce.com/res/shortv/2024/11/22/9268c0ad35ac4eb48b73b15214433664.jpg"
-                    ],
-                    "gameItemDetail": "消除一个",
-                    "isFree": 1,
-                    "virtualCurrencyPrice": "20",
-                    "stock": "0"
-                }
-            ]
-        }
-    },
-    {
-        "code": 200,
-        "data": {
-            "gameId": "1900022189550772224",
-            "gameName": "钉钉子",
-            "gameImg": [
-                "https://cdn.hkchunce.com/res/shortv/2024/11/22/da12198692194204b263e36406abdc6c.jpg"
-            ],
-            "gameDetail": "一起来钉钉子呀",
-            "gameLevel": [
-                {
-                    "gameLevelId": "1900022204155338752",
-                    "gameLevelName": "第一关",
-                    "isComplete": 0
-                },
-                {
-                    "gameLevelId": "1900022206218936320",
-                    "gameLevelName": "第二关",
-                    "isComplete": 0
-                },
-                {
-                    "gameLevelId": "1900022208181870592",
-                    "gameLevelName": "第三关",
-                    "isComplete": 0
-                },
-                {
-                    "gameLevelId": "1900022210136416256",
-                    "gameLevelName": "第四关",
-                    "isComplete": 0
-                },
-                {
-                    "gameLevelId": "1900022212099350528",
-                    "gameLevelName": "第五关",
-                    "isComplete": 0
-                },
-                {
-                    "gameLevelId": "1900022217795215360",
-                    "gameLevelName": "第六关",
-                    "isComplete": 0
-                }
-            ],
-            "gameItem": [
-                {
-                    "gameItemId": "1900022219774926848",
-                    "gameItemName": "解锁钉子孔",
-                    "gameItemImg": [
-                        "https://cdn.hkchunce.com/res/shortv/2024/12/25/images/58f7459d6b264edb818ae0016eea3889/72284c4288184d3b80562e96bb7f6b35.jpg"
-                    ],
-                    "gameItemDetail": "随机解锁钉子孔",
-                    "isFree": 0,
-                    "virtualCurrencyPrice": "10",
-                    "stock": "0"
-                },
-                {
-                    "gameItemId": "1900022221792387072",
-                    "gameItemName": "跳关",
-                    "gameItemImg": [
-                        "https://cdn.hkchunce.com/res/shortv/2024/12/25/images/5d6070ebe900478b9bd095f9e4105957/339cf6c7dd28420c8a0e615c87650756.jpg"
-                    ],
-                    "gameItemDetail": "直接下一光",
-                    "isFree": 0,
-                    "virtualCurrencyPrice": "50",
-                    "stock": "0"
-                },
-                {
-                    "gameItemId": "1900022225047166976",
-                    "gameItemName": "攻略",
-                    "gameItemImg": [
-                        "https://cdn.hkchunce.com/res/shortv/2024/12/25/images/58376cd3caf549478678fe5d1c21ca05/b079aae817cc41ba80a0fa6d9f3ff811.jpg"
-                    ],
-                    "gameItemDetail": "查看攻略",
-                    "isFree": 1,
-                    "virtualCurrencyPrice": "0",
-                    "stock": "0"
-                }
-            ]
-        }
+{
+    "code": 200,
+    "data": {
+        "gameId": "1900020634239934464",
+        "gameName": "消消乐",
+        "gameImg": [
+            "https://cdn.hkchunce.com/res/shortv/2024/11/22/431e8c97bf2b429b87affc47add68c3b.jpg"
+        ],
+        "gameDetail": "消消乐，越消越快乐",
+        "gameUrl": "",
+        "gameLevel": [
+            {
+                "gameLevelId": "1900020657178583040",
+                "gameLevelName": "第一关",
+                "isComplete": 0
+            },
+            {
+                "gameLevelId": "1900020659162488832",
+                "gameLevelName": "第二关",
+                "isComplete": 0
+            },
+            {
+                "gameLevelId": "1900020661117034496",
+                "gameLevelName": "第三关",
+                "isComplete": 0
+            },
+            {
+                "gameLevelId": "1900020663079968768",
+                "gameLevelName": "第四关",
+                "isComplete": 0
+            },
+            {
+                "gameLevelId": "1900020665034514432",
+                "gameLevelName": "第五关",
+                "isComplete": 0
+            }
+        ],
+        "gameItem": [
+            {
+                "gameItemId": "1900020666997448704",
+                "gameItemName": "交换",
+                "gameItemImg": [
+                    "https: //cdn.hkchunce.com/res/shortv/2024/11/22/3f87fd8788fc41d68a77543364fb3794.jpg"
+                ],
+                "gameItemDetail": "交换",
+                "isFree": 1,
+                "virtualCurrencyPrice": "0",
+                "gameItemItemNum": "0"
+            },
+            {
+                "gameItemId": "1900020669073629184",
+                "gameItemName": "炸弹",
+                "gameItemImg": [
+                    "https://cdn.hkchunce.com/res/shortv/2024/11/22/585d876ec3c540a2be8c25415267d220.jpg"
+                ],
+                "gameItemDetail": "炸弹",
+                "isFree": 0,
+                "virtualCurrencyPrice": "15",
+                "gameItemItemNum": "0"
+            },
+            {
+                "gameItemId": "1900020671040757760",
+                "gameItemName": "消除",
+                "gameItemImg": [
+                    "https://cdn.hkchunce.com/res/shortv/2024/11/22/9268c0ad35ac4eb48b73b15214433664.jpg"
+                ],
+                "gameItemDetail": "消除一个",
+                "isFree": 0,
+                "virtualCurrencyPrice": "20",
+                "gameItemItemNum": "0"
+            }
+        ]
     }
-]
+}

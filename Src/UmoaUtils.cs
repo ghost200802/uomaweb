@@ -2,7 +2,7 @@ using System;
 
 public static class UomaUtils
 {
-    private static readonly string _baseUrl = "http://test.uoma.com";
+    private static readonly string _baseUrl = "https://test.uoma.com";
     private static readonly string _token = "63640cd232093159c6b70378ab833d832bade56471bb32efaa8b342c64eab1bbb22a6647943c75e7f8721739e1f644e825314";
     private static readonly string _acceptLanguage = "zh";
     private static readonly string _platform = "user";

@@ -1,9 +1,41 @@
 ### 游戏相关接口
 
 GET /v1/games/{gameld} -> GetGameData.json
+
 PosT /v1/userGameltems/consume
+    Body 参数
+    application/json
+    string gameId
+    string gameItemId
+
+    例子：
+    {
+        "gameId": "1900020634239934464",
+        "gameItemId": "1900020669073629184"
+    }
+
+    
+
 PosT /v1/userGameltems/purchase
+    Body 参数
+    application/json
+    string gameId
+    string gameItemId
+    string gameItemItemNum
+    
+    例子：
+    {
+        "gameId": "1900020634239934464",
+        "gameItemId": "1900020669073629184",
+        "gameItemItemNum": "2"
+    }
+
 PosT /v1/userGameLevels
+    Body 参数
+    application/json
+    string gameId
+    string gameLevelId
+    string gameLevelStar
 
 Get /v1/users
 

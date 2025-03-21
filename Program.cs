@@ -18,7 +18,8 @@ class Program
             Console.WriteLine("1. 获取玩家信息");
             Console.WriteLine("2. 选择游戏并获取游戏信息");
             Console.WriteLine("3. 查看内存数据");
-            Console.WriteLine("4. 退出");
+            Console.WriteLine("4. 购买游戏道具");
+            Console.WriteLine("5. 退出");
 
             var choice = Console.ReadLine();
 
@@ -62,6 +63,73 @@ class Program
                     break;
 
                 case "4":
+                    var gameConfigForItems = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config", "games.json"));
+                    var itemConfig = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config", "items.json"));
+                    var gamesForItems = JsonConvert.DeserializeObject<GameConfig>(gameConfigForItems);
+                    var items = JsonConvert.DeserializeObject<ItemConfig>(itemConfig);
+
+                    Console.WriteLine("\n可选游戏列表：");
+                    var gameListForItems = gamesForItems.Games.ToList();
+                    for (int i = 0; i < gameListForItems.Count; i++)
+                    {
+                        Console.WriteLine($"{i + 1}. {gameListForItems[i].Key}: {gameListForItems[i].Value.name}");
+                    }
+
+                    Console.WriteLine("\n请输入游戏序号：");
+                    if (int.TryParse(Console.ReadLine(), out int gameIndex) && gameIndex > 0 && gameIndex <= gameListForItems.Count)
+                    {
+                        var selectedGame = gameListForItems[gameIndex - 1];
+                        var gameItems = items.Items[selectedGame.Key];
+
+                        Console.WriteLine("\n可选道具列表：");
+                        var itemList = gameItems.ToList();
+                        for (int i = 0; i < itemList.Count; i++)
+                        {
+                            Console.WriteLine($"{i + 1}. {itemList[i].Value.name}");
+                        }
+
+                        Console.WriteLine("\n请输入道具序号：");
+                        if (int.TryParse(Console.ReadLine(), out int itemIndex) && itemIndex > 0 && itemIndex <= itemList.Count)
+                        {
+                            var selectedItem = itemList[itemIndex - 1];
+                            Console.WriteLine("\n请输入购买数量：");
+                            if (!int.TryParse(Console.ReadLine(), out int itemNum) || itemNum <= 0)
+                            {
+                                Console.WriteLine("无效的购买数量，请输入正整数");
+                                break;
+                            }
+
+                            var purchaseResponse = await apiClient.PurchaseUserGameItemAsync(
+                                selectedGame.Value.id,
+                                selectedItem.Value.id,
+                                itemNum.ToString()
+                            );
+
+                            if (purchaseResponse == null)
+                            {
+                                Console.WriteLine("购买失败：服务器响应无效");
+                            }
+                            else if (purchaseResponse.Code == 200)
+                            {
+                                Console.WriteLine("购买成功！");
+                            }
+                            else
+                            {
+                                Console.WriteLine("购买失败");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("无效的道具序号");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("无效的游戏序号");
+                    }
+                    break;
+
+                case "5":
                     return;
 
                 default:

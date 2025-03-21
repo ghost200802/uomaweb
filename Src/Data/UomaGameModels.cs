@@ -35,6 +35,6 @@ namespace UomaWeb.Models
     {
         public int IsFree { get; set; }
         public string VirtualCurrencyPrice { get; set; }
-        public string Stock { get; set; }
+        public string GameItemItemNum { get; set; }
     }
 }

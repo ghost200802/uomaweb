@@ -6,6 +6,7 @@ namespace UomaWeb.Models
     {
         public int Code { get; set; }
         public T Data { get; set; }
+        public string Message { get; set; }
     }
 
     public class GameInfo
@@ -14,18 +15,18 @@ namespace UomaWeb.Models
         public string GameName { get; set; }
         public List<string> GameImg { get; set; }
         public string GameDetail { get; set; }
-        public List<GameLevel> GameLevel { get; set; }
-        public List<GameItem> GameItem { get; set; }
+        public List<GameLevelInfo> GameLevel { get; set; }
+        public List<GameItemInfo> GameItem { get; set; }
     }
 
-    public class GameLevel
+    public class GameLevelInfo
     {
         public string GameLevelId { get; set; }
         public string GameLevelName { get; set; }
         public int IsComplete { get; set; }
     }
 
-    public class GameItem
+    public class GameItemInfo
     {
         public string GameItemId { get; set; }
         public string GameItemName { get; set; }
@@ -33,7 +34,7 @@ namespace UomaWeb.Models
         public string GameItemDesc { get; set; }
         public int IsFree { get; set; }
         public string VirtualCurrencyPrice { get; set; }
-        public string Stock { get; set; }
+        public string GameItemItemNum { get; set; }
         public decimal Price { get; set; }
         public string Status { get; set; }
     }
