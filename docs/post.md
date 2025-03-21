@@ -37,6 +37,13 @@ PosT /v1/userGameLevels
     string gameLevelId
     string gameLevelStar
 
+    例子：
+    {
+        "gameId": "1900020634239934464",
+        "gameLevelId": "1900020657178583040",
+        "gameLevelStar": "2"
+    }
+
 Get /v1/users
 
 ### 接口请求头

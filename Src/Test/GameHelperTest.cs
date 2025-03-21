@@ -24,7 +24,8 @@ namespace UomaWeb
                 Console.WriteLine("3. 使用道具");
                 Console.WriteLine("4. 购买道具");
                 Console.WriteLine("5. 查询道具数量");
-                Console.WriteLine("6. 返回主菜单");
+                Console.WriteLine("6. 通关关卡");
+                Console.WriteLine("7. 返回主菜单");
 
                 var choice = Console.ReadLine();
 
@@ -181,6 +182,49 @@ namespace UomaWeb
                         break;
 
                     case "6":
+                        Console.WriteLine("请选择游戏：");
+                        var gameConfigForComplete = GameDataManager.GetGameConfig();
+                        var gameListForComplete = new List<string>();
+                        var indexForComplete = 1;
+                        foreach (var game in gameConfigForComplete.Games)
+                        {
+                            Console.WriteLine($"{indexForComplete}. {game.Value.name}");
+                            gameListForComplete.Add(game.Key);
+                            indexForComplete++;
+                        }
+                        if (!int.TryParse(Console.ReadLine(), out int gameChoiceForComplete) || gameChoiceForComplete < 1 || gameChoiceForComplete > gameListForComplete.Count)
+                        {
+                            Console.WriteLine("无效的选择");
+                            break;
+                        }
+                        var gameNameForComplete = gameListForComplete[gameChoiceForComplete - 1];
+
+                        Console.WriteLine("请输入关卡编号：");
+                        if (!int.TryParse(Console.ReadLine(), out int levelNum) || levelNum < 1)
+                        {
+                            Console.WriteLine("无效的关卡编号");
+                            break;
+                        }
+
+                        Console.WriteLine("请输入星级评分（1-3）：");
+                        if (!int.TryParse(Console.ReadLine(), out int starNum) || starNum < 1 || starNum > 3)
+                        {
+                            Console.WriteLine("无效的星级评分");
+                            break;
+                        }
+
+                        var completeResult = await _gameHelper.CompleteLevelAsync(gameNameForComplete, levelNum - 1, starNum);
+                        if (completeResult.successCode == 0)
+                        {
+                            Console.WriteLine($"通关成功！当前关卡：{completeResult.currLevel}，虚拟币数量：{completeResult.currencyNum}");
+                        }
+                        else
+                        {
+                            Console.WriteLine("通关失败");
+                        }
+                        break;
+
+                    case "7":
                         return;
 
                     default:

@@ -28,10 +28,19 @@
     如果调用成功，则调用更新UserInfo接口，调用更新GameInfo的接口
     从DataManager中,找到对应的数据，返回玩家的虚拟币数量,以及对应道具使用后的数量
 
-4.2查询道具数量 GetGameItemNum
+5.查询道具数量 GetGameItemNum
     --输入: gameName(string)
     --返回：itemNums(Dictionary<string, int>)
 
     根据GameName,从config中查找gameId,调用更新GameInfo的接口
     从DataManager中，找到对应游戏的所有道具数量，根据config，组织成itemName和数量的字典返回
 
+6.玩家通关某个关卡 
+    --输入：gameName(string),gameLevel(int),star(int)
+    --返回: successCode(int),CurrLevel(int),CurrencyNum(int)
+
+    根据GameName,从config中查找gameId,根据gameLevel,从config中查找关卡id,调用LevelComplete接口
+    如果返回code=200,则调用成功
+    成功时,根据GameName,从config中查找gameId,调用更新GameInfo的接口
+    从DataManager中,找到对应游戏的数据，查找最高通关关卡，将下一关作为当前关卡返回
+    同时调用调用更新UserInfo接口，返回玩家的虚拟币数量

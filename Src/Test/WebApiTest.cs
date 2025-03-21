@@ -27,7 +27,8 @@ namespace UomaWeb
                 Console.WriteLine("3. 查看内存数据");
                 Console.WriteLine("4. 购买游戏道具");
                 Console.WriteLine("5. 消耗游戏道具");
-                Console.WriteLine("6. 返回主菜单");
+                Console.WriteLine("6. 完成游戏关卡");
+                Console.WriteLine("7. 返回主菜单");
 
                 var choice = Console.ReadLine();
 
@@ -54,6 +55,10 @@ namespace UomaWeb
                         break;
 
                     case "6":
+                        await CompleteLevelTest();
+                        break;
+
+                    case "7":
                         return;
 
                     default:
@@ -224,6 +229,75 @@ namespace UomaWeb
                 else
                 {
                     Console.WriteLine("无效的道具序号");
+                }
+            }
+            else
+            {
+                Console.WriteLine("无效的游戏序号");
+            }
+        }
+
+        private async Task CompleteLevelTest()
+        {
+            var gameConfig = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config", "games.json"));
+            var levelConfig = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config", "levels.json"));
+            var games = JsonConvert.DeserializeObject<GameConfig>(gameConfig);
+            var levels = JsonConvert.DeserializeObject<LevelConfig>(levelConfig);
+
+            Console.WriteLine("\n可选游戏列表：");
+            var gameList = games.Games.ToList();
+            for (int i = 0; i < gameList.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {gameList[i].Key}: {gameList[i].Value.name}");
+            }
+
+            Console.WriteLine("\n请输入游戏序号：");
+            if (int.TryParse(Console.ReadLine(), out int gameIndex) && gameIndex > 0 && gameIndex <= gameList.Count)
+            {
+                var selectedGame = gameList[gameIndex - 1];
+                var gameLevels = levels.Levels[selectedGame.Key];
+
+                Console.WriteLine("\n可选关卡列表：");
+                for (int i = 0; i < gameLevels.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {gameLevels[i].name}");
+                }
+
+                Console.WriteLine("\n请输入关卡序号：");
+                if (int.TryParse(Console.ReadLine(), out int levelIndex) && levelIndex > 0 && levelIndex <= gameLevels.Count)
+                {
+                    var selectedLevel = gameLevels[levelIndex - 1];
+
+                    Console.WriteLine("\n请输入星级评分（1-3）：");
+                    if (int.TryParse(Console.ReadLine(), out int star) && star >= 1 && star <= 3)
+                    {
+                        var completeResponse = await _apiClient.LevelCompleteAsync(
+                            selectedGame.Value.id,
+                            selectedLevel.id,
+                            star.ToString()
+                        );
+
+                        if (completeResponse == null)
+                        {
+                            Console.WriteLine("关卡完成提交失败：服务器响应无效");
+                        }
+                        else if (completeResponse.Code == 200)
+                        {
+                            Console.WriteLine("关卡完成提交成功！");
+                        }
+                        else
+                        {
+                            Console.WriteLine("关卡完成提交失败");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("无效的星级评分，请输入1-3之间的数字");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("无效的关卡序号");
                 }
             }
             else
