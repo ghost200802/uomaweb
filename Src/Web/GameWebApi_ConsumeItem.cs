@@ -14,7 +14,12 @@ public partial class GameWebApi
     public async Task<ApiResponse<ConsumeUserGameItemReply>> ConsumeUserGameItemAsync(string gameId, string gameItemId)
     {
         var request = new HttpRequestMessage(HttpMethod.Post, $"{UomaUtils.BaseUrl}/v1/userGameItems/consume");
+        
+        // 输出请求URL
+        Console.WriteLine($"\n请求URL: {UomaUtils.BaseUrl}/v1/userGameItems/consume");
+        
         SetCommonHeaders(request);
+        request.Headers.Add("Accept", "application/json");
 
         var requestBody = new ConsumeUserGameItemRequest
         {
@@ -22,16 +27,27 @@ public partial class GameWebApi
             GameItemId = gameItemId
         };
 
-        request.Content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+        var jsonBody = JsonConvert.SerializeObject(requestBody);
+        request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
         var response = await _httpClient.SendAsync(request);
         var responseContent = await response.Content.ReadAsStringAsync();
         Console.WriteLine($"\n响应内容:\n{responseContent}\n");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return new ApiResponse<ConsumeUserGameItemReply>
+            {
+                Code = (int)response.StatusCode,
+                Message = $"请求失败: {response.StatusCode} - {responseContent}"
+            };
+        }
 
         var settings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore
         };
         return JsonConvert.DeserializeObject<ApiResponse<ConsumeUserGameItemReply>>(responseContent, settings);
+
     }
 }

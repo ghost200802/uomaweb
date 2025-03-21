@@ -19,7 +19,8 @@ class Program
             Console.WriteLine("2. 选择游戏并获取游戏信息");
             Console.WriteLine("3. 查看内存数据");
             Console.WriteLine("4. 购买游戏道具");
-            Console.WriteLine("5. 退出");
+            Console.WriteLine("5. 消耗游戏道具");
+            Console.WriteLine("6. 退出");
 
             var choice = Console.ReadLine();
 
@@ -130,6 +131,66 @@ class Program
                     break;
 
                 case "5":
+                    var gameConfigForConsume = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config", "games.json"));
+                    var itemConfigForConsume = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config", "items.json"));
+                    var gamesForConsume = JsonConvert.DeserializeObject<GameConfig>(gameConfigForConsume);
+                    var itemsForConsume = JsonConvert.DeserializeObject<ItemConfig>(itemConfigForConsume);
+
+                    Console.WriteLine("\n可选游戏列表：");
+                    var gameListForConsume = gamesForConsume.Games.ToList();
+                    for (int i = 0; i < gameListForConsume.Count; i++)
+                    {
+                        Console.WriteLine($"{i + 1}. {gameListForConsume[i].Key}: {gameListForConsume[i].Value.name}");
+                    }
+
+                    Console.WriteLine("\n请输入游戏序号：");
+                    if (int.TryParse(Console.ReadLine(), out int gameIndexForConsume) && gameIndexForConsume > 0 && gameIndexForConsume <= gameListForConsume.Count)
+                    {
+                        var selectedGameForConsume = gameListForConsume[gameIndexForConsume - 1];
+                        var gameItemsForConsume = itemsForConsume.Items[selectedGameForConsume.Key];
+
+                        Console.WriteLine("\n可选道具列表：");
+                        var itemListForConsume = gameItemsForConsume.ToList();
+                        for (int i = 0; i < itemListForConsume.Count; i++)
+                        {
+                            Console.WriteLine($"{i + 1}. {itemListForConsume[i].Value.name}");
+                        }
+
+                        Console.WriteLine("\n请输入道具序号：");
+                        if (int.TryParse(Console.ReadLine(), out int itemIndexForConsume) && itemIndexForConsume > 0 && itemIndexForConsume <= itemListForConsume.Count)
+                        {
+                            var selectedItemForConsume = itemListForConsume[itemIndexForConsume - 1];
+
+                            var consumeResponse = await apiClient.ConsumeUserGameItemAsync(
+                                selectedGameForConsume.Value.id,
+                                selectedItemForConsume.Value.id
+                            );
+
+                            if (consumeResponse == null)
+                            {
+                                Console.WriteLine("消耗失败：服务器响应无效");
+                            }
+                            else if (consumeResponse.Code == 200)
+                            {
+                                Console.WriteLine("消耗成功！");
+                            }
+                            else
+                            {
+                                Console.WriteLine("消耗失败");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("无效的道具序号");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("无效的游戏序号");
+                    }
+                    break;
+
+                case "6":
                     return;
 
                 default:
