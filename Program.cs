@@ -8,7 +8,6 @@ using UomaWeb;
 
 #if !UNITY_2017_1_OR_NEWER
 
->>>>>>> Stashed changes
 class Program
 {
     static async Task Main(string[] args)
