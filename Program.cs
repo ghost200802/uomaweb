@@ -6,7 +6,8 @@ using UomaWeb.Models;
 using Newtonsoft.Json;
 using UomaWeb;
 
-#if  !UNITY
+#if !UNITY_2017_1_OR_NEWER
+
 class Program
 {
     static async Task Main(string[] args)
