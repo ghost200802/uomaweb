@@ -6,6 +6,7 @@ using UomaWeb.Models;
 using Newtonsoft.Json;
 using UomaWeb;
 
+#if  !UNITY
 class Program
 {
     static async Task Main(string[] args)
@@ -14,3 +15,5 @@ class Program
         await testManager.RunTest();
     }
 }
+
+#endif
