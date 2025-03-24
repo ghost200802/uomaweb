@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using UomaWeb.Models;
+using Unity;
+using UnityEngine;
 
 namespace UomaWeb
 {
-    public class GameDataManager
+    public class GameDataManager : MonoBehaviour
     {
         private static ItemConfig _itemConfig;
         private static LevelConfig _levelConfig;

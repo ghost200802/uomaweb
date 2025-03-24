@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace UomaWeb
 {
-    public class TestManager
+    public class TestManager : MonoBehaviour
     {
         private readonly WebApiTest _webApiTest;
         private readonly GameHelperTest _gameHelperTest;
@@ -14,7 +16,7 @@ namespace UomaWeb
             _gameHelperTest = new GameHelperTest();
         }
 
-        public async Task RunTest()
+        public IEnumerator RunTest()
         {
             while (true)
             {
@@ -28,15 +30,16 @@ namespace UomaWeb
                 switch (choice)
                 {
                     case "1":
-                        await _webApiTest.RunTest();
+                        yield return StartCoroutine(_webApiTest.RunTest());
                         break;
 
                     case "2":
-                        await _gameHelperTest.RunTest();
+                        yield return StartCoroutine(_gameHelperTest.RunTest());
                         break;
 
                     case "3":
-                        return;
+                        yield return null;
+                        break;
 
                     default:
                         Console.WriteLine("无效的选择");

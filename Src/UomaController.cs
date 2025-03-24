@@ -1,43 +1,52 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using UomaWeb.Models;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UomaWeb
 {
-    public static class UomaController
+    public class UomaController : MonoBehaviour
     {
-        private static readonly GameHelper _gameHelper = new GameHelper();
+        public static UomaController Instance = null;
+        
+        private GameHelper _gameHelper;
 
-        public static string GameName {get; set;}
+         public string gameName = "";
 
-        public static async Task<int> GetCurrentLevelAsync()
+        private void Awake()
         {
-            return await _gameHelper.GetPlayerCurrLevelAsync(GameName);
+            if (gameObject != null) _gameHelper = gameObject.AddComponent<GameHelper>();
+            Instance = this;
         }
 
-        public static async Task<(int successCode, int currLevel, int currencyNum)> CompleteLevelAsync(int gameLevel, int star)
+        public IEnumerator GetCurrentLevel(System.Action<int> callback)
         {
-            return await _gameHelper.CompleteLevelAsync(GameName, gameLevel, star);
+            yield return _gameHelper.GetPlayerCurrLevel(gameName, callback);
         }
 
-        public static async Task<int> GetVirtualCurrencyAsync()
+        public IEnumerator CompleteLevel(int gameLevel, int star, System.Action<(int successCode, int currLevel, int currencyNum)> callback)
         {
-            return await _gameHelper.GetVirtualCurrencyAsync();
+            yield return _gameHelper.CompleteLevel(gameName, gameLevel, star, callback);
         }
 
-        public static async Task<(int successCode, int currencyNum, int itemNum)> UseGameItemAsync(string itemName)
+        public IEnumerator GetVirtualCurrency(System.Action<int> callback)
         {
-            return await _gameHelper.UseGameItemAsync(GameName, itemName);
+            yield return _gameHelper.GetVirtualCurrency(callback);
         }
 
-        public static async Task<(int successCode, int currencyNum, int itemNum)> BuyGameItemAsync(string itemName, int num)
+        public IEnumerator UseGameItem(string itemName, System.Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
-            return await _gameHelper.BuyGameItemAsync(GameName, itemName, num);
+            yield return _gameHelper.UseGameItem(gameName, itemName, callback);
         }
 
-        public static async Task<Dictionary<string, int>> GetGameItemNumAsync()
+        public IEnumerator BuyGameItem(string itemName, int num, System.Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
-            return await _gameHelper.GetGameItemNumAsync(GameName);
+            yield return _gameHelper.BuyGameItem(gameName, itemName, num, callback);
+        }
+
+        public IEnumerator GetGameItemNum(System.Action<Dictionary<string, int>> callback)
+        {
+            yield return _gameHelper.GetGameItemNum(gameName, callback);
         }
     }
 }

@@ -1,5 +1,5 @@
 using System;
-using System.Net.Http;
+using System.Collections;
 using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json;
@@ -8,39 +8,97 @@ using UomaWeb.Models;
 using System.Collections.Generic;
 using UomaWeb;
 using System.IO;
+using UnityEngine;
+using UnityEngine.Networking;
 
 public partial class GameWebApi
 {
-    public async Task<ApiResponse<UserInfo>> GetUserInfoAsync()
+    public IEnumerator GetUserInfo(Action<ApiResponse<UserInfo>> callback)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{UomaUtils.BaseUrl}/v1/users");
+        UnityWebRequest request = null;
+        request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/users", "GET");
 
         // 输出请求URL
-        Console.WriteLine($"\n请求URL: {UomaUtils.BaseUrl}/v1/users");
+        Debug.Log($"\n请求URL: {UomaUtils.BaseUrl}/v1/users");
         
         SetCommonHeaders(request);
+        request.downloadHandler = new DownloadHandlerBuffer();
 
-        var response = await _httpClient.SendAsync(request);
-        var responseContent = await response.Content.ReadAsStringAsync();
-        
-        var settings = new JsonSerializerSettings
-        {
-            NullValueHandling = NullValueHandling.Ignore
-        };
-        var result = JsonConvert.DeserializeObject<ApiResponse<UserInfo>>(responseContent, settings);
+        yield return request.SendWebRequest();
 
-        // 如果解析成功，输出用户信息
-        if (result?.Data != null)
+        try
         {
-            Console.WriteLine("\n收到用户信息");
-            Console.WriteLine("\n解析后的用户信息:");
-            Console.WriteLine($"邀请码: {result.Data.InviteCode}");
-            Console.WriteLine($"CNY余额: {result.Data.AvailableBalanceCny}");
-            Console.WriteLine($"USD余额: {result.Data.AvailableBalanceUsd}");
-            Console.WriteLine($"虚拟币: {result.Data.VirtualCurrency}");
-            Console.WriteLine($"创建时间: {result.Data.CreateTime}");
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                var errorMessage = $"请求失败: {request.error}";
+                if (request.responseCode > 0)
+                {
+                    errorMessage += $" (HTTP {request.responseCode})";
+                }
+                if (!string.IsNullOrEmpty(request.downloadHandler?.text))
+                {
+                    errorMessage += $"\n响应内容: {request.downloadHandler.text}";
+                }
+                Debug.LogError(errorMessage);
+                callback?.Invoke(new ApiResponse<UserInfo>
+                {
+                    Code = request.responseCode > 0 ? (int)request.responseCode : -1,
+                    Message = errorMessage
+                });
+                yield break;
+            }
+
+            var responseContent = request.downloadHandler.text;
+            Debug.Log($"\n响应内容:\n{responseContent}\n");
+
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
+            var result = JsonConvert.DeserializeObject<ApiResponse<UserInfo>>(responseContent, settings);
+
+            if (result?.Data != null)
+            {
+                Debug.Log("\n收到用户信息");
+                Debug.Log("\n解析后的用户信息:");
+                Debug.Log($"邀请码: {result.Data.InviteCode}");
+                Debug.Log($"CNY余额: {result.Data.AvailableBalanceCny}");
+                Debug.Log($"USD余额: {result.Data.AvailableBalanceUsd}");
+                Debug.Log($"虚拟币: {result.Data.VirtualCurrency}");
+                Debug.Log($"创建时间: {result.Data.CreateTime}");
+            }
+            else
+            {
+                Debug.LogWarning("响应成功但未包含用户数据");
+            }
+
+            callback?.Invoke(result);
         }
-
-        return result;
+        catch (JsonException jsonEx)
+        {
+            var errorMessage = $"解析响应数据失败: {jsonEx.Message}";
+            Debug.LogError($"{errorMessage}\n响应内容: {request.downloadHandler.text}");
+            callback?.Invoke(new ApiResponse<UserInfo>
+            {
+                Code = -1,
+                Message = errorMessage
+            });
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"获取用户信息时发生异常: {ex.Message}\n{ex.StackTrace}");
+            callback?.Invoke(new ApiResponse<UserInfo>
+            {
+                Code = -1,
+                Message = $"系统错误: {ex.Message}"
+            });
+        }
+        finally
+        {
+            if (request != null)
+            {
+                request.Dispose();
+            }
+        }
     }
 }

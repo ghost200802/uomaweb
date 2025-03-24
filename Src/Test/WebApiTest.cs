@@ -1,14 +1,14 @@
 using System;
-using System.Threading.Tasks;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using UomaWeb.Models;
 using Newtonsoft.Json;
-using UomaWeb;
+using UnityEngine;
 
 namespace UomaWeb
 {
-    public class WebApiTest
+    public class WebApiTest : MonoBehaviour
     {
         private readonly GameWebApi _apiClient;
 
@@ -17,7 +17,7 @@ namespace UomaWeb
             _apiClient = new GameWebApi();
         }
 
-        public async Task RunTest()
+        public IEnumerator RunTest()
         {
             while (true)
             {
@@ -35,11 +35,11 @@ namespace UomaWeb
                 switch (choice)
                 {
                     case "1":
-                        await GetUserInfo();
+                        yield return GetUserInfo();
                         break;
 
                     case "2":
-                        await GetGameInfo();
+                        yield return GetGameInfo();
                         break;
 
                     case "3":
@@ -47,19 +47,19 @@ namespace UomaWeb
                         break;
 
                     case "4":
-                        await PurchaseGameItem();
+                        yield return PurchaseGameItem();
                         break;
 
                     case "5":
-                        await ConsumeGameItem();
+                        yield return ConsumeGameItem();
                         break;
 
                     case "6":
-                        await CompleteLevelTest();
+                        yield return CompleteLevelTest();
                         break;
 
                     case "7":
-                        return;
+                        yield break;
 
                     default:
                         Console.WriteLine("无效的选择");
@@ -68,16 +68,18 @@ namespace UomaWeb
             }
         }
 
-        private async Task GetUserInfo()
+        private IEnumerator GetUserInfo()
         {
-            var userResponse = await _apiClient.GetUserInfoAsync();
-            if (userResponse?.Data != null)
+            yield return _apiClient.GetUserInfo((response) =>
             {
-                GameDataManager.UpdateUserData(userResponse.Data);
-            }
+                if (response?.Data != null)
+                {
+                    GameDataManager.UpdateUserData(response.Data);
+                }
+            });
         }
 
-        private async Task GetGameInfo()
+        private IEnumerator GetGameInfo()
         {
             var gameConfig = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config", "games.json"));
             var games = JsonConvert.DeserializeObject<GameConfig>(gameConfig);
@@ -93,7 +95,7 @@ namespace UomaWeb
             if (int.TryParse(Console.ReadLine(), out int index) && index > 0 && index <= gameList.Count)
             {
                 var selectedGame = gameList[index - 1];
-                await _apiClient.GetGameInfoAsync(selectedGame.Value.id);
+                yield return _apiClient.GetGameInfo(selectedGame.Value.id, null);
             }
             else
             {
@@ -108,7 +110,7 @@ namespace UomaWeb
             Console.WriteLine(JsonConvert.SerializeObject(gameState, Formatting.Indented));
         }
 
-        private async Task PurchaseGameItem()
+        private IEnumerator PurchaseGameItem()
         {
             var gameConfig = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config", "games.json"));
             var itemConfig = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config", "items.json"));
@@ -143,27 +145,28 @@ namespace UomaWeb
                     if (!int.TryParse(Console.ReadLine(), out int itemNum) || itemNum <= 0)
                     {
                         Console.WriteLine("无效的购买数量，请输入正整数");
-                        return;
+                        yield break;
                     }
 
-                    var purchaseResponse = await _apiClient.PurchaseUserGameItemAsync(
+                    yield return _apiClient.PurchaseUserGameItem(
                         selectedGame.Value.id,
                         selectedItem.Value.id,
-                        itemNum.ToString()
-                    );
-
-                    if (purchaseResponse == null)
-                    {
-                        Console.WriteLine("购买失败：服务器响应无效");
-                    }
-                    else if (purchaseResponse.Code == 200)
-                    {
-                        Console.WriteLine("购买成功！");
-                    }
-                    else
-                    {
-                        Console.WriteLine("购买失败");
-                    }
+                        itemNum.ToString(),
+                        (response) =>
+                        {
+                            if (response == null)
+                            {
+                                Console.WriteLine("购买失败：服务器响应无效");
+                            }
+                            else if (response.Code == 200)
+                            {
+                                Console.WriteLine("购买成功！");
+                            }
+                            else
+                            {
+                                Console.WriteLine("购买失败");
+                            }
+                        });
                 }
                 else
                 {
@@ -176,7 +179,7 @@ namespace UomaWeb
             }
         }
 
-        private async Task ConsumeGameItem()
+        private IEnumerator ConsumeGameItem()
         {
             var gameConfig = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config", "games.json"));
             var itemConfig = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config", "items.json"));
@@ -208,23 +211,24 @@ namespace UomaWeb
                 {
                     var selectedItem = itemList[itemIndex - 1];
 
-                    var consumeResponse = await _apiClient.ConsumeUserGameItemAsync(
+                    yield return _apiClient.ConsumeUserGameItem(
                         selectedGame.Value.id,
-                        selectedItem.Value.id
-                    );
-
-                    if (consumeResponse == null)
-                    {
-                        Console.WriteLine("消耗失败：服务器响应无效");
-                    }
-                    else if (consumeResponse.Code == 200)
-                    {
-                        Console.WriteLine("消耗成功！");
-                    }
-                    else
-                    {
-                        Console.WriteLine("消耗失败");
-                    }
+                        selectedItem.Value.id,
+                        (response) =>
+                        {
+                            if (response == null)
+                            {
+                                Console.WriteLine("消耗失败：服务器响应无效");
+                            }
+                            else if (response.Code == 200)
+                            {
+                                Console.WriteLine("消耗成功！");
+                            }
+                            else
+                            {
+                                Console.WriteLine("消耗失败");
+                            }
+                        });
                 }
                 else
                 {
@@ -237,7 +241,7 @@ namespace UomaWeb
             }
         }
 
-        private async Task CompleteLevelTest()
+        private IEnumerator CompleteLevelTest()
         {
             var gameConfig = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config", "games.json"));
             var levelConfig = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config", "levels.json"));
@@ -271,24 +275,25 @@ namespace UomaWeb
                     Console.WriteLine("\n请输入星级评分（1-3）：");
                     if (int.TryParse(Console.ReadLine(), out int star) && star >= 1 && star <= 3)
                     {
-                        var completeResponse = await _apiClient.LevelCompleteAsync(
+                        yield return _apiClient.LevelComplete(
                             selectedGame.Value.id,
                             selectedLevel.id,
-                            star.ToString()
-                        );
-
-                        if (completeResponse == null)
-                        {
-                            Console.WriteLine("关卡完成提交失败：服务器响应无效");
-                        }
-                        else if (completeResponse.Code == 200)
-                        {
-                            Console.WriteLine("关卡完成提交成功！");
-                        }
-                        else
-                        {
-                            Console.WriteLine("关卡完成提交失败");
-                        }
+                            star.ToString(),
+                            (response) =>
+                            {
+                                if (response == null)
+                                {
+                                    Console.WriteLine("关卡完成提交失败：服务器响应无效");
+                                }
+                                else if (response.Code == 200)
+                                {
+                                    Console.WriteLine("关卡完成提交成功！");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("关卡完成提交失败");
+                                }
+                            });
                     }
                     else
                     {

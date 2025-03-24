@@ -1,5 +1,4 @@
 using System;
-using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json;
@@ -8,18 +7,21 @@ using UomaWeb.Models;
 using System.Collections.Generic;
 using UomaWeb;
 using System.IO;
+using UnityEngine;
+using UnityEngine.Networking;
+using System.Collections;
 
 public partial class GameWebApi
 {
-    public async Task<ApiResponse<ConsumeUserGameItemReply>> ConsumeUserGameItemAsync(string gameId, string gameItemId)
+    public IEnumerator ConsumeUserGameItem(string gameId, string gameItemId, Action<ApiResponse<ConsumeUserGameItemReply>> callback)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{UomaUtils.BaseUrl}/v1/userGameItems/consume");
+        UnityWebRequest request = null;
+        request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/userGameItems/consume", "POST");
         
         // 输出请求URL
-        Console.WriteLine($"\n请求URL: {UomaUtils.BaseUrl}/v1/userGameItems/consume");
+        Debug.Log($"\n请求URL: {UomaUtils.BaseUrl}/v1/userGameItems/consume");
         
         SetCommonHeaders(request);
-        request.Headers.Add("Accept", "application/json");
 
         var requestBody = new ConsumeUserGameItemRequest
         {
@@ -28,26 +30,12 @@ public partial class GameWebApi
         };
 
         var jsonBody = JsonConvert.SerializeObject(requestBody);
-        request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+        var bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
 
-        var response = await _httpClient.SendAsync(request);
-        var responseContent = await response.Content.ReadAsStringAsync();
-        Console.WriteLine($"\n响应内容:\n{responseContent}\n");
-
-        if (!response.IsSuccessStatusCode)
-        {
-            return new ApiResponse<ConsumeUserGameItemReply>
-            {
-                Code = (int)response.StatusCode,
-                Message = $"请求失败: {response.StatusCode} - {responseContent}"
-            };
-        }
-
-        var settings = new JsonSerializerSettings
-        {
-            NullValueHandling = NullValueHandling.Ignore
-        };
-        return JsonConvert.DeserializeObject<ApiResponse<ConsumeUserGameItemReply>>(responseContent, settings);
-
+        yield return request.SendWebRequest();
+        
+        request.Dispose();
     }
 }

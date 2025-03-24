@@ -1,5 +1,5 @@
 using System;
-using System.Net.Http;
+using System.Collections;
 using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json;
@@ -8,17 +8,12 @@ using UomaWeb.Models;
 using System.Collections.Generic;
 using UomaWeb;
 using System.IO;
+using UnityEngine;
+using UnityEngine.Networking;
 
 public partial class GameWebApi
 {
-    private readonly HttpClient _httpClient;
-
-    public GameWebApi()
-    {
-        _httpClient = new HttpClient();
-    }
-
-    private void SetCommonHeaders(HttpRequestMessage request)
+    private void SetCommonHeaders(UnityWebRequest request)
     {
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
         var nonce = GenerateNonce();
@@ -26,18 +21,19 @@ public partial class GameWebApi
 
         GameDataManager.SetToken(UomaUtils.Token);
 
-        request.Headers.Add("timestamp", timestamp);
-        request.Headers.Add("token", UomaUtils.Token);
-        request.Headers.Add("nonce", nonce);
-        request.Headers.Add("sign", sign);
-        request.Headers.Add("accept-language", UomaUtils.AcceptLanguage);
-        request.Headers.Add("platform", UomaUtils.Platform);
-        request.Headers.Add("User-Agent", UomaUtils.UserAgent);
+        request.SetRequestHeader("timestamp", timestamp);
+        request.SetRequestHeader("token", UomaUtils.Token);
+        request.SetRequestHeader("nonce", nonce);
+        request.SetRequestHeader("sign", sign);
+        request.SetRequestHeader("accept-language", UomaUtils.AcceptLanguage);
+        request.SetRequestHeader("platform", UomaUtils.Platform);
+        request.SetRequestHeader("User-Agent", UomaUtils.UserAgent);
+        request.SetRequestHeader("Content-Type", "application/json");
     }
 
     private string GenerateNonce()
     {
-        var random = new Random();
+        var random = new System.Random();
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         var stringBuilder = new StringBuilder(32);
 
@@ -65,30 +61,5 @@ public partial class GameWebApi
             
             return sb.ToString();
         }
-    }
-
-    public async Task<ApiResponse<CreateUserGameLevelReply>> CreateUserGameLevelAsync(string gameId, string gameLevelId, string gameLevelStar)
-    {
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{UomaUtils.BaseUrl}/v1/userGameLevels");
-        SetCommonHeaders(request);
-
-        var requestBody = new CreateUserGameLevelRequest
-        {
-            GameId = gameId,
-            GameLevelId = gameLevelId,
-            GameLevelStar = gameLevelStar
-        };
-
-        request.Content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
-
-        var response = await _httpClient.SendAsync(request);
-        var responseContent = await response.Content.ReadAsStringAsync();
-        //Console.WriteLine($"\n响应内容:\n{responseContent}\n");
-
-        var settings = new JsonSerializerSettings
-        {
-            NullValueHandling = NullValueHandling.Ignore
-        };
-        return JsonConvert.DeserializeObject<ApiResponse<CreateUserGameLevelReply>>(responseContent, settings);
     }
 }

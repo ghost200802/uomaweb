@@ -1,20 +1,26 @@
-using System.Threading.Tasks;
+using System;
+using System.Collections;
 using UomaWeb.Models;
 
 namespace UomaWeb
 {
     public partial class GameHelper
     {
-        public async Task<int> GetVirtualCurrencyAsync()
+        public IEnumerator GetVirtualCurrency(Action<int> callback)
         {
-            var response = await _gameWebApi.GetUserInfoAsync();
-            if (response?.Data != null)
+            yield return _gameWebApi.GetUserInfo((response) =>
             {
-                GameDataManager.UpdateUserData(response.Data);
-                int.TryParse(GameDataManager.GetGameState().PlayerData?.VirtualCurrency, out int virtualCurrency);
-                return virtualCurrency;
-            }
-            return 0;
+                if (response?.Data != null)
+                {
+                    GameDataManager.UpdateUserData(response.Data);
+                    int.TryParse(GameDataManager.GetGameState().PlayerData?.VirtualCurrency, out int virtualCurrency);
+                    callback?.Invoke(virtualCurrency);
+                }
+                else
+                {
+                    callback?.Invoke(0);
+                }
+            });
         }
     }
 }
