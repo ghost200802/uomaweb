@@ -6,6 +6,13 @@ namespace UomaWeb
 {
     public partial class GameHelper
     {
+        public static GameLevelData GetLevelData(int level)
+        {
+            var gameName = UomaController.Instance.GameName;
+            var gameData = GameDataManager.GetGameState().Games[gameName];
+            return gameData.Levels[level];
+        }
+        
         public IEnumerator GetPlayerCurrLevel(Action<int> callback)
         {
             // 从配置中查找gameId

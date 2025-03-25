@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace UomaWeb.Models
 {
@@ -20,7 +21,9 @@ namespace UomaWeb.Models
 
     public class LevelAction
     {
+        [JsonProperty("gameLevelId")]
         public string id { get; set; }
+        [JsonProperty("gameLevelName")]
         public string name { get; set; }
     }
 }
