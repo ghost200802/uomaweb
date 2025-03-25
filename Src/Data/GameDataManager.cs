@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace UomaWeb
 {
-    public class GameDataManager : MonoBehaviour
+    public static class GameDataManager
     {
         private static ItemConfig _itemConfig;
         private static LevelConfig _levelConfig;
@@ -24,10 +24,9 @@ namespace UomaWeb
             };
         }
 
-        static GameDataManager()
+        public static void Init()
         {
-            // 先初始化数据结构，再加载配置
-            InitializeUomaGameData();
+            GameDataManager.InitializeUomaGameData();
             GameDataManager.LoadGameConfig();
             GameDataManager.LoadItemConfig();
             GameDataManager.LoadLevelConfig();
@@ -57,7 +56,8 @@ namespace UomaWeb
         {
             try
             {
-                var configPath = Path.Combine(Directory.GetCurrentDirectory(), "config", "games.json");
+                string streamingAssetsPath = Application.streamingAssetsPath; // 获取 StreamingAssets 目录
+                string configPath = Path.Combine(streamingAssetsPath, "uomaconfig", "games.json");
                 var json = File.ReadAllText(configPath);
                 _gameConfig = JsonConvert.DeserializeObject<GameConfig>(json);
             }
@@ -71,7 +71,8 @@ namespace UomaWeb
         {
             try
             {
-                var configPath = Path.Combine(Directory.GetCurrentDirectory(), "config", "items.json");
+                string streamingAssetsPath = Application.streamingAssetsPath; // 获取 StreamingAssets 目录
+                string configPath = Path.Combine(streamingAssetsPath, "uomaconfig", "items.json");
                 var json = File.ReadAllText(configPath);
                 _itemConfig = JsonConvert.DeserializeObject<ItemConfig>(json);
             }
@@ -85,7 +86,8 @@ namespace UomaWeb
         {
             try
             {
-                var configPath = Path.Combine(Directory.GetCurrentDirectory(), "config", "levels.json");
+                string streamingAssetsPath = Application.streamingAssetsPath; // 获取 StreamingAssets 目录
+                string configPath = Path.Combine(streamingAssetsPath, "uomaconfig", "levels.json");
                 var json = File.ReadAllText(configPath);
                 _levelConfig = JsonConvert.DeserializeObject<LevelConfig>(json);
             }
@@ -105,27 +107,19 @@ namespace UomaWeb
             _uomaGame.Token = token;
         }
 
-        public static void UpdateGameData(string gameId, GameInfo gameInfo)
+        public static void UpdateGameData(GameInfo gameInfo)
         {
             if (gameInfo == null) return;
-
-            // 从配置中查找gameId对应的游戏key
-            string gameKey = null;
-            foreach (var game in _gameConfig.Games)
-            {
-                if (game.Value.id == gameId)
-                {
-                    gameKey = game.Key;
-                    break;
-                }
-            }
+            
+            var gameName = UomaController.Instance.GameName;
+            var gameId = UomaController.Instance.GameId;
 
             // 如果找到对应的游戏key，使用它来更新数据
-            if (gameKey != null)
+            if (gameName != null)
             {
-                if (!_uomaGame.Games.ContainsKey(gameKey))
+                if (!_uomaGame.Games.ContainsKey(gameName))
                 {
-                    _uomaGame.Games[gameKey] = new GameData
+                    _uomaGame.Games[gameName] = new GameData
                     {
                         Items = new Dictionary<string, GameItemData>()
                     };
@@ -140,9 +134,9 @@ namespace UomaWeb
 
                         // 从配置中查找道具ID对应的key
                         string itemKey = null;
-                        if (_itemConfig?.Items != null && _itemConfig.Items.ContainsKey(gameKey))
+                        if (_itemConfig?.Items != null && _itemConfig.Items.ContainsKey(gameName))
                         {
-                            foreach (var configItem in _itemConfig.Items[gameKey])
+                            foreach (var configItem in _itemConfig.Items[gameName])
                             {
                                 if (configItem.Value.id == item.GameItemId)
                                 {
@@ -155,7 +149,7 @@ namespace UomaWeb
                         // 如果找到对应的道具key，使用它来更新数据
                         if (itemKey != null)
                         {
-                            _uomaGame.Games[gameKey].Items[itemKey] = new GameItemData
+                            _uomaGame.Games[gameName].Items[itemKey] = new GameItemData
                             {
                                 IsFree = item.IsFree,
                                 VirtualCurrencyPrice = item.VirtualCurrencyPrice,
@@ -174,43 +168,43 @@ namespace UomaWeb
                         // 从配置中查找LevelID对应的num
                         int levelNum = -1;
                         string levelId = null;
-                        if (_levelConfig?.Levels != null && _levelConfig.Levels.ContainsKey(gameKey))
+                        if (_levelConfig?.Levels != null && _levelConfig.Levels.ContainsKey(gameName))
                         {   
-                            for (int i = 0; i < _levelConfig.Levels[gameKey].Count; i++)
+                            for (int i = 0; i < _levelConfig.Levels[gameName].Count; i++)
                             {
-                                if (_levelConfig.Levels[gameKey][i].id == level.GameLevelId)
+                                if (_levelConfig.Levels[gameName][i].id == level.GameLevelId)
                                 {
                                     levelNum = i;
-                                    levelId = _levelConfig.Levels[gameKey][i].id;
+                                    levelId = _levelConfig.Levels[gameName][i].id;
                                     break;
                                 }
                             }
                         }
 
                         // 确保Levels列表已初始化
-                        if (_uomaGame.Games[gameKey].Levels == null)
+                        if (_uomaGame.Games[gameName].Levels == null)
                         {
-                            _uomaGame.Games[gameKey].Levels = new List<GameLevelData>();
+                            _uomaGame.Games[gameName].Levels = new List<GameLevelData>();
                         }
 
                         // 如果找到对应的关卡，更新数据；否则添加新关卡
                         if (levelId != null)
                         {
-                            if (levelNum < _uomaGame.Games[gameKey].Levels.Count)
+                            if (levelNum < _uomaGame.Games[gameName].Levels.Count)
                             {
-                                _uomaGame.Games[gameKey].Levels[levelNum] = new GameLevelData
+                                _uomaGame.Games[gameName].Levels[levelNum] = new GameLevelData
                                 {
                                     Id = levelId,
-                                    Name = _levelConfig.Levels[gameKey][levelNum].name,
+                                    Name = _levelConfig.Levels[gameName][levelNum].name,
                                     IsComplete = level.IsComplete
                                 };
                             }
                             else
                             {
-                                _uomaGame.Games[gameKey].Levels.Add(new GameLevelData
+                                _uomaGame.Games[gameName].Levels.Add(new GameLevelData
                                 {
                                     Id = levelId,
-                                    Name = _levelConfig.Levels[gameKey][levelNum].name,
+                                    Name = _levelConfig.Levels[gameName][levelNum].name,
                                     IsComplete = level.IsComplete
                                 });
                             }

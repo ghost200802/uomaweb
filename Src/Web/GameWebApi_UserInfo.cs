@@ -19,7 +19,7 @@ public partial class GameWebApi
         request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/users", "GET");
 
         // 输出请求URL
-        Debug.Log($"\n请求URL: {UomaUtils.BaseUrl}/v1/users");
+        Debug.Log($"请求URL: {UomaUtils.BaseUrl}/v1/users");
         
         SetCommonHeaders(request);
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -49,7 +49,7 @@ public partial class GameWebApi
             }
 
             var responseContent = request.downloadHandler.text;
-            Debug.Log($"\n响应内容:\n{responseContent}\n");
+            Debug.Log($"响应内容: {responseContent}");
 
             var settings = new JsonSerializerSettings
             {
@@ -59,13 +59,15 @@ public partial class GameWebApi
 
             if (result?.Data != null)
             {
-                Debug.Log("\n收到用户信息");
-                Debug.Log("\n解析后的用户信息:");
-                Debug.Log($"邀请码: {result.Data.InviteCode}");
-                Debug.Log($"CNY余额: {result.Data.AvailableBalanceCny}");
-                Debug.Log($"USD余额: {result.Data.AvailableBalanceUsd}");
-                Debug.Log($"虚拟币: {result.Data.VirtualCurrency}");
-                Debug.Log($"创建时间: {result.Data.CreateTime}");
+                GameDataManager.UpdateUserData(result.Data);
+                Debug.Log("用户信息已更新");
+                // Debug.Log("收到用户信息");
+                // Debug.Log("解析后的用户信息:");
+                // Debug.Log($"邀请码: {result.Data.InviteCode}");
+                // Debug.Log($"CNY余额: {result.Data.AvailableBalanceCny}");
+                // Debug.Log($"USD余额: {result.Data.AvailableBalanceUsd}");
+                // Debug.Log($"虚拟币: {result.Data.VirtualCurrency}");
+                // Debug.Log($"创建时间: {result.Data.CreateTime}");
             }
             else
             {

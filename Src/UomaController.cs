@@ -11,22 +11,32 @@ namespace UomaWeb
         
         private GameHelper _gameHelper;
 
-         public string gameName = "";
+        [SerializeField]
+        private string gameName = "";
+
+        [SerializeField]
+        private string gameId = "";
+        
+        public string GameName => gameName;
+        
+        public string GameId => gameId;
 
         private void Awake()
         {
             if (gameObject != null) _gameHelper = gameObject.AddComponent<GameHelper>();
+            GameDataManager.Init();
+            GameDataManager.SetToken(UomaUtils.Token);
             Instance = this;
         }
 
         public IEnumerator GetCurrentLevel(System.Action<int> callback)
         {
-            yield return _gameHelper.GetPlayerCurrLevel(gameName, callback);
+            yield return _gameHelper.GetPlayerCurrLevel(callback);
         }
 
         public IEnumerator CompleteLevel(int gameLevel, int star, System.Action<(int successCode, int currLevel, int currencyNum)> callback)
         {
-            yield return _gameHelper.CompleteLevel(gameName, gameLevel, star, callback);
+            yield return _gameHelper.CompleteLevel(gameLevel, star, callback);
         }
 
         public IEnumerator GetVirtualCurrency(System.Action<int> callback)
@@ -36,17 +46,17 @@ namespace UomaWeb
 
         public IEnumerator UseGameItem(string itemName, System.Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
-            yield return _gameHelper.UseGameItem(gameName, itemName, callback);
+            yield return _gameHelper.UseGameItem(itemName, callback);
         }
 
         public IEnumerator BuyGameItem(string itemName, int num, System.Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
-            yield return _gameHelper.BuyGameItem(gameName, itemName, num, callback);
+            yield return _gameHelper.BuyGameItem(itemName, num, callback);
         }
 
         public IEnumerator GetGameItemNum(System.Action<Dictionary<string, int>> callback)
         {
-            yield return _gameHelper.GetGameItemNum(gameName, callback);
+            yield return _gameHelper.GetGameItemNum(callback);
         }
     }
 }

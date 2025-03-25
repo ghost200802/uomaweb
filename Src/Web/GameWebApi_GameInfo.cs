@@ -12,13 +12,16 @@ using UnityEngine.Networking;
 using System.Collections;
 public partial class GameWebApi
 {
-    public IEnumerator GetGameInfo(string gameId, Action<ApiResponse<GameInfo>> callback)
+    public IEnumerator GetGameInfo(Action<ApiResponse<GameInfo>> callback)
     {
+        var gameName = UomaController.Instance.GameName;
+        var gameId = UomaController.Instance.GameId;
+        
         UnityWebRequest request = null;
         request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/games/{gameId}", "GET");
         
         // 输出请求URL
-        Debug.Log($"\n请求URL: {UomaUtils.BaseUrl}/v1/games/{gameId}");
+        Debug.Log($"请求URL: {UomaUtils.BaseUrl}/v1/games/{gameId}");
         
         SetCommonHeaders(request);
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -36,7 +39,7 @@ public partial class GameWebApi
                 }
                 if (!string.IsNullOrEmpty(request.downloadHandler?.text))
                 {
-                    errorMessage += $"\n响应内容: {request.downloadHandler.text}";
+                    errorMessage += $"响应内容: {request.downloadHandler.text}";
                 }
                 Debug.LogError(errorMessage);
                 callback?.Invoke(new ApiResponse<GameInfo>
@@ -48,7 +51,7 @@ public partial class GameWebApi
             }
 
             var responseContent = request.downloadHandler.text;
-            Debug.Log($"\n响应内容:\n{responseContent}\n");
+            Debug.Log($"响应内容: {responseContent}");
 
             var settings = new JsonSerializerSettings
             {
@@ -58,6 +61,7 @@ public partial class GameWebApi
 
             if (result?.Data != null)
             {
+                GameDataManager.UpdateGameData(result.Data);
                 Debug.Log("游戏信息已更新");
             }
             else

@@ -6,22 +6,13 @@ namespace UomaWeb
 {
     public partial class GameHelper
     {
-        public IEnumerator GetPlayerCurrLevel(string gameName, Action<int> callback)
+        public IEnumerator GetPlayerCurrLevel(Action<int> callback)
         {
             // 从配置中查找gameId
             var gameConfig = GameDataManager.GetGameState();
-            string gameId = null;
-            string gameKey = null;
 
-            foreach (var game in GameDataManager.GetGameConfig().Games)
-            {
-                if (game.Key == gameName)
-                {
-                    gameId = game.Value.id;
-                    gameKey = game.Key;
-                    break;
-                }
-            }
+            var gameName = UomaController.Instance.GameName;
+            var gameId = UomaController.Instance.GameId;
 
             if (gameId == null)
             {
@@ -30,7 +21,7 @@ namespace UomaWeb
             }
 
             // 更新游戏信息
-            yield return _gameWebApi.GetGameInfo(gameId, (response) =>
+            yield return _gameWebApi.GetGameInfo((response) =>
             {
                 if (response?.Data == null)
                 {
@@ -39,7 +30,7 @@ namespace UomaWeb
                 }
 
                 // 查找最高通关关卡
-                var gameData = GameDataManager.GetGameState().Games[gameKey];
+                var gameData = GameDataManager.GetGameState().Games[gameName];
                 if (gameData?.Levels == null)
                 {
                     callback?.Invoke(1);
@@ -59,23 +50,13 @@ namespace UomaWeb
             });
         }
 
-        public IEnumerator CompleteLevel(string gameName, int gameLevel, int star, Action<(int successCode, int currLevel, int currencyNum)> callback)
+        public IEnumerator CompleteLevel(int gameLevel, int star, Action<(int successCode, int currLevel, int currencyNum)> callback)
         {
+            var gameName = UomaController.Instance.GameName;
+            var gameId = UomaController.Instance.GameId;
+            
             // 从配置中查找gameId和levelId
-            var gameConfig = GameDataManager.GetGameState();
-            string gameId = null;
-            string gameKey = null;
             string levelId = null;
-
-            foreach (var game in GameDataManager.GetGameConfig().Games)
-            {
-                if (game.Key == gameName)
-                {
-                    gameId = game.Value.id;
-                    gameKey = game.Key;
-                    break;
-                }
-            }
 
             if (gameId == null)
             {
@@ -85,9 +66,9 @@ namespace UomaWeb
 
             // 从配置中查找levelId
             var levelConfig = GameDataManager.GetLevelConfig();
-            if (levelConfig?.Levels != null && levelConfig.Levels.ContainsKey(gameKey))
+            if (levelConfig?.Levels != null && levelConfig.Levels.ContainsKey(gameName))
             {   
-                levelId = levelConfig.Levels[gameKey][gameLevel].id;
+                levelId = levelConfig.Levels[gameName][gameLevel].id;
                 Console.WriteLine($"Level ID: {levelId}");
             }
 
@@ -106,12 +87,15 @@ namespace UomaWeb
                     return;
                 }
 
-                StartCoroutine(UpdateLevelInfo(gameId, gameKey, callback));
+                StartCoroutine(UpdateLevelInfo(callback));
             });
         }
 
-        private IEnumerator UpdateLevelInfo(string gameId, string gameKey, Action<(int successCode, int currLevel, int currencyNum)> callback)
+        private IEnumerator UpdateLevelInfo(Action<(int successCode, int currLevel, int currencyNum)> callback)
         {
+            var gameName = UomaController.Instance.GameName;
+            var gameId = UomaController.Instance.GameId;
+            
             bool userInfoUpdated = false;
             bool gameInfoUpdated = false;
             int nextLevel = 1;
@@ -129,18 +113,18 @@ namespace UomaWeb
             });
 
             // 更新游戏信息
-            yield return _gameWebApi.GetGameInfo(gameId, (gameResponse) =>
+            yield return _gameWebApi.GetGameInfo((gameResponse) =>
             {
                 if (gameResponse?.Data != null)
                 {
-                    GameDataManager.UpdateGameData(gameId, gameResponse.Data);
+                    GameDataManager.UpdateGameData(gameResponse.Data);
                     var gameState = GameDataManager.GetGameState();
-                    if (gameState.Games.ContainsKey(gameKey) && gameState.Games[gameKey].Levels != null)
+                    if (gameState.Games.ContainsKey(gameName) && gameState.Games[gameName].Levels != null)
                     {
                         int highestCompletedLevel = -1;
-                        for (int i = 0; i < gameState.Games[gameKey].Levels.Count; i++)
+                        for (int i = 0; i < gameState.Games[gameName].Levels.Count; i++)
                         {
-                            if (gameState.Games[gameKey].Levels[i].IsComplete == 1)
+                            if (gameState.Games[gameName].Levels[i].IsComplete == 1)
                             {
                                 highestCompletedLevel = i;
                             }

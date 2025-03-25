@@ -8,24 +8,18 @@ namespace UomaWeb
 {
     public partial class GameHelper
     {
-        public IEnumerator UseGameItem(string gameName, string itemName, Action<(int successCode, int currencyNum, int itemNum)> callback)
+        public IEnumerator UseGameItem(string itemName, Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
             // 从配置中查找gameId和itemId
             var gameConfig = GameDataManager.GetGameState();
-            string gameId = null;
+
+            var gameName = UomaController.Instance.GameName;
+            var gameId = UomaController.Instance.GameId;
+            
             string itemId = null;
-            string gameKey = null;
             string itemKey = null;
 
-            foreach (var game in GameDataManager.GetGameConfig().Games)
-            {
-                if (game.Key == gameName)
-                {
-                    gameId = game.Value.id;
-                    gameKey = game.Key;
-                    break;
-                }
-            }
+
 
             if (gameId == null)
             {
@@ -33,7 +27,7 @@ namespace UomaWeb
                 yield break;
             }
 
-            foreach (var item in GameDataManager.GetItemConfig().Items[gameKey])
+            foreach (var item in GameDataManager.GetItemConfig().Items[gameName])
             {
                 if (item.Key.ToLower() == itemName.ToLower())
                 {
@@ -58,28 +52,18 @@ namespace UomaWeb
                     return;
                 }
 
-                this.StartCoroutine(UpdateItemInfo(gameId, gameKey, itemKey, callback));
+                this.StartCoroutine(UpdateItemInfo(itemKey, callback));
             });
         }
 
-        public IEnumerator BuyGameItem(string gameName, string itemName, int num, Action<(int successCode, int currencyNum, int itemNum)> callback)
+        public IEnumerator BuyGameItem(string itemName, int num, Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
             // 从配置中查找gameId和itemId
-            var gameConfig = GameDataManager.GetGameState();
-            string gameId = null;
+            var gameName = UomaController.Instance.GameName;
+            var gameId = UomaController.Instance.GameId;
+            
             string itemId = null;
-            string gameKey = null;
             string itemKey = null;
-
-            foreach (var game in GameDataManager.GetGameConfig().Games)
-            {
-                if (game.Key == gameName)
-                {
-                    gameId = game.Value.id;
-                    gameKey = game.Key;
-                    break;
-                }
-            }
 
             if (gameId == null)
             {
@@ -87,7 +71,7 @@ namespace UomaWeb
                 yield break;
             }
 
-            foreach (var item in GameDataManager.GetItemConfig().Items[gameKey])
+            foreach (var item in GameDataManager.GetItemConfig().Items[gameName])
             {
                 if (item.Key.ToLower() == itemName.ToLower())
                 {
@@ -112,12 +96,15 @@ namespace UomaWeb
                     return;
                 }
 
-                this.StartCoroutine(UpdateItemInfo(gameId, gameKey, itemKey, callback));
+                this.StartCoroutine(UpdateItemInfo(itemKey, callback));
             });
         }
 
-        private IEnumerator UpdateItemInfo(string gameId, string gameKey, string itemKey, Action<(int successCode, int currencyNum, int itemNum)> callback)
+        private IEnumerator UpdateItemInfo(string itemKey, Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
+            var gameName = UomaController.Instance.GameName;
+            var gameId = UomaController.Instance.GameId;
+            
             bool userInfoUpdated = false;
             bool gameInfoUpdated = false;
             int virtualCurrency = 0;
@@ -135,16 +122,16 @@ namespace UomaWeb
             });
 
             // 更新游戏信息
-            yield return _gameWebApi.GetGameInfo(gameId, (gameResponse) =>
+            yield return _gameWebApi.GetGameInfo((gameResponse) =>
             {
                 if (gameResponse?.Data != null)
                 {
-                    GameDataManager.UpdateGameData(gameId, gameResponse.Data);
+                    GameDataManager.UpdateGameData(gameResponse.Data);
                     var gameState = GameDataManager.GetGameState();
-                    if (gameState.Games.ContainsKey(gameKey) && 
-                        gameState.Games[gameKey].Items.ContainsKey(itemKey))
+                    if (gameState.Games.ContainsKey(gameName) && 
+                        gameState.Games[gameName].Items.ContainsKey(itemKey))
                     {
-                        int.TryParse(gameState.Games[gameKey].Items[itemKey].GameItemItemNum, out itemNum);
+                        int.TryParse(gameState.Games[gameName].Items[itemKey].GameItemItemNum, out itemNum);
                     }
                 }
                 gameInfoUpdated = true;
@@ -159,22 +146,11 @@ namespace UomaWeb
             callback?.Invoke((0, virtualCurrency, itemNum));
         }
 
-        public IEnumerator GetGameItemNum(string gameName, Action<Dictionary<string, int>> callback)
+        public IEnumerator GetGameItemNum(Action<Dictionary<string, int>> callback)
         {
             // 从配置中查找gameId
-            var gameConfig = GameDataManager.GetGameState();
-            string gameId = null;
-            string gameKey = null;
-
-            foreach (var game in GameDataManager.GetGameConfig().Games)
-            {
-                if (game.Key == gameName)
-                {
-                    gameId = game.Value.id;
-                    gameKey = game.Key;
-                    break;
-                }
-            }
+            var gameName = UomaController.Instance.GameName;
+            var gameId = UomaController.Instance.GameId;
 
             if (gameId == null)
             {
@@ -183,7 +159,7 @@ namespace UomaWeb
             }
 
             // 更新游戏信息
-            yield return _gameWebApi.GetGameInfo(gameId, (response) =>
+            yield return _gameWebApi.GetGameInfo((response) =>
             {
                 if (response?.Data == null)
                 {
@@ -193,9 +169,9 @@ namespace UomaWeb
 
                 var result = new Dictionary<string, int>();
                 var gameState = GameDataManager.GetGameState();
-                if (gameState.Games.ContainsKey(gameKey))
+                if (gameState.Games.ContainsKey(gameName))
                 {
-                    foreach (var item in gameState.Games[gameKey].Items)
+                    foreach (var item in gameState.Games[gameName].Items)
                     {
                         int.TryParse(item.Value.GameItemItemNum, out int num);
                         result[item.Key] = num;
