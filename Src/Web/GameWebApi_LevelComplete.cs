@@ -15,54 +15,64 @@ public partial class GameWebApi
 {
     public IEnumerator LevelComplete(string gameId, string gameLevelId, string gameLevelStar, Action<ApiResponse<LevelCompleteReply>> callback)
     {
-        UnityWebRequest request = null;
-        request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/userGameLevels", "POST");
-        
-        // 输出请求URL
-        Debug.Log($"请求URL: {UomaUtils.BaseUrl}/v1/userGameLevels");
-        
-        SetCommonHeaders(request);
+        UnityWebRequest request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/userGameLevels", "POST");
 
-        var requestBody = new LevelCompleteRequest
+        try
         {
-            GameId = gameId,
-            GameLevelId = gameLevelId,
-            GameLevelStar = gameLevelStar
-        };
+            // 输出请求URL
+            Debug.Log($"请求URL: {UomaUtils.BaseUrl}/v1/userGameLevels");
 
-        var jsonBody = JsonConvert.SerializeObject(requestBody);
-        var bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = new DownloadHandlerBuffer();
+            SetCommonHeaders(request);
 
-        yield return request.SendWebRequest();
-
-        if (request.result != UnityWebRequest.Result.Success)
-        {
-            var errorMessage = $"请求失败: {request.error}";
-            if (request.responseCode > 0)
+            var requestBody = new LevelCompleteRequest
             {
-                errorMessage += $" (HTTP {request.responseCode})";
+                GameId = gameId,
+                GameLevelId = gameLevelId,
+                GameLevelStar = gameLevelStar
+            };
+
+            var jsonBody = JsonConvert.SerializeObject(requestBody);
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+
+            yield return request.SendWebRequest();
+
+            try
+            {
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    var errorMessage = $"请求失败: {request.error}";
+                    if (request.responseCode > 0)
+                    {
+                        errorMessage += $" (HTTP {request.responseCode})";
+                    }
+
+                    if (!string.IsNullOrEmpty(request.downloadHandler?.text))
+                    {
+                        errorMessage += $"响应内容: {request.downloadHandler.text}";
+                    }
+
+                    Debug.LogError(errorMessage);
+                    callback?.Invoke(new ApiResponse<LevelCompleteReply>
+                    {
+                        Code = request.responseCode > 0 ? (int)request.responseCode : -1,
+                        Message = errorMessage
+                    });
+                    yield break;
+                }
+
+                var responseContent = request.downloadHandler.text;
+                Debug.Log($"响应内容:{responseContent}\n");
             }
-            if (!string.IsNullOrEmpty(request.downloadHandler?.text))
+            catch (Exception e)
             {
-                errorMessage += $"响应内容: {request.downloadHandler.text}";
+                Debug.LogError("处理响应时出错: " + e);
             }
-            Debug.LogError(errorMessage);
-            callback?.Invoke(new ApiResponse<LevelCompleteReply>
-            {
-                Code = request.responseCode > 0 ? (int)request.responseCode : -1,
-                Message = errorMessage
-            });
-            yield break;
         }
-        
-        var responseContent = request.downloadHandler.text;
-        Debug.Log($"响应内容:{responseContent}\n");
-        
-        // if (request != null)
-        // {
-        //     request.Dispose();
-        // }
+        finally
+        {
+            request.Dispose();
+        }
     }
 }

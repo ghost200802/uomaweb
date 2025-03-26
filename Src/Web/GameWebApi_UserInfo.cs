@@ -17,83 +17,76 @@ public partial class GameWebApi
     {
         UnityWebRequest request = null;
         request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/users", "GET");
-
-        // 输出请求URL
-        Debug.Log($"请求URL: {UomaUtils.BaseUrl}/v1/users");
-        
-        SetCommonHeaders(request);
-        request.downloadHandler = new DownloadHandlerBuffer();
-
-        yield return request.SendWebRequest();
-
         try
         {
-            if (request.result != UnityWebRequest.Result.Success)
+            // 输出请求URL
+            Debug.Log($"请求URL: {UomaUtils.BaseUrl}/v1/users");
+
+            SetCommonHeaders(request);
+            request.downloadHandler = new DownloadHandlerBuffer();
+
+            yield return request.SendWebRequest();
+
+            try
             {
-                var errorMessage = $"请求失败: {request.error}";
-                if (request.responseCode > 0)
+                if (request.result != UnityWebRequest.Result.Success)
                 {
-                    errorMessage += $" (HTTP {request.responseCode})";
+                    var errorMessage = $"请求失败: {request.error}";
+                    if (request.responseCode > 0)
+                    {
+                        errorMessage += $" (HTTP {request.responseCode})";
+                    }
+    
+                    if (!string.IsNullOrEmpty(request.downloadHandler?.text))
+                    {
+                        errorMessage += $"\n响应内容: {request.downloadHandler.text}";
+                    }
+    
+                    Debug.LogError(errorMessage);
+                    callback?.Invoke(new ApiResponse<UserInfo>
+                    {
+                        Code = request.responseCode > 0 ? (int)request.responseCode : -1,
+                        Message = errorMessage
+                    });
+                    yield break;
                 }
-                if (!string.IsNullOrEmpty(request.downloadHandler?.text))
+    
+                var responseContent = request.downloadHandler.text;
+                Debug.Log($"响应内容: {responseContent}");
+    
+                var settings = new JsonSerializerSettings
                 {
-                    errorMessage += $"\n响应内容: {request.downloadHandler.text}";
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+                var result = JsonConvert.DeserializeObject<ApiResponse<UserInfo>>(responseContent, settings);
+    
+                if (result?.Data != null)
+                {
+                    GameDataManager.UpdateUserData(result.Data);
+                    Debug.Log("用户信息已更新");
+                    // Debug.Log("收到用户信息");
+                    // Debug.Log("解析后的用户信息:");
+                    // Debug.Log($"邀请码: {result.Data.InviteCode}");
+                    // Debug.Log($"CNY余额: {result.Data.AvailableBalanceCny}");
+                    // Debug.Log($"USD余额: {result.Data.AvailableBalanceUsd}");
+                    Debug.Log($"虚拟币: {result.Data.VirtualCurrency}");
+                    // Debug.Log($"创建时间: {result.Data.CreateTime}");
                 }
-                Debug.LogError(errorMessage);
-                callback?.Invoke(new ApiResponse<UserInfo>
+                else
                 {
-                    Code = request.responseCode > 0 ? (int)request.responseCode : -1,
-                    Message = errorMessage
-                });
-                yield break;
+                    Debug.LogWarning("响应成功但未包含用户数据");
+                }
+    
+                callback?.Invoke(result);
             }
-
-            var responseContent = request.downloadHandler.text;
-            Debug.Log($"响应内容: {responseContent}");
-
-            var settings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            };
-            var result = JsonConvert.DeserializeObject<ApiResponse<UserInfo>>(responseContent, settings);
-
-            if (result?.Data != null)
-            {
-                GameDataManager.UpdateUserData(result.Data);
-                Debug.Log("用户信息已更新");
-                // Debug.Log("收到用户信息");
-                // Debug.Log("解析后的用户信息:");
-                // Debug.Log($"邀请码: {result.Data.InviteCode}");
-                // Debug.Log($"CNY余额: {result.Data.AvailableBalanceCny}");
-                // Debug.Log($"USD余额: {result.Data.AvailableBalanceUsd}");
-                Debug.Log($"虚拟币: {result.Data.VirtualCurrency}");
-                // Debug.Log($"创建时间: {result.Data.CreateTime}");
+            catch (Exception e) {
+                Debug.LogError("处理响应时出错: " + e);
             }
-            else
-            {
-                Debug.LogWarning("响应成功但未包含用户数据");
-            }
-
-            callback?.Invoke(result);
+            
         }
-        catch (JsonException jsonEx)
+        finally
         {
-            var errorMessage = $"解析响应数据失败: {jsonEx.Message}";
-            Debug.LogError($"{errorMessage}\n响应内容: {request.downloadHandler.text}");
-            callback?.Invoke(new ApiResponse<UserInfo>
-            {
-                Code = -1,
-                Message = errorMessage
-            });
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"获取用户信息时发生异常: {ex.Message}\n{ex.StackTrace}");
-            callback?.Invoke(new ApiResponse<UserInfo>
-            {
-                Code = -1,
-                Message = $"系统错误: {ex.Message}"
-            });
+            request.Dispose();
         }
     }
 }

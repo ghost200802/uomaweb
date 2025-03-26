@@ -17,30 +17,27 @@ public partial class GameWebApi
     {
         UnityWebRequest request = null;
         request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/userGameItems/purchase", "POST");
-        
-        // 输出请求URL
-        Debug.Log($"\n请求URL: {UomaUtils.BaseUrl}/v1/userGameItems/purchase");
-        
-        SetCommonHeaders(request);
-
-        var requestBody = new PurchaseUserGameItemRequest
-        {
-            GameId = gameId,
-            GameItemId = gameItemId,
-            GameItemItemNum = gameItemItemNum
-        };
-
-        var jsonBody = JsonConvert.SerializeObject(requestBody);
-        var bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = new DownloadHandlerBuffer();
-
-        yield return request.SendWebRequest();
-
-        yield return request.SendWebRequest();
-
         try
         {
+            // 输出请求URL
+            Debug.Log($"\n请求URL: {UomaUtils.BaseUrl}/v1/userGameItems/purchase");
+
+            SetCommonHeaders(request);
+
+            var requestBody = new PurchaseUserGameItemRequest
+            {
+                GameId = gameId,
+                GameItemId = gameItemId,
+                GameItemItemNum = gameItemItemNum
+            };
+
+            var jsonBody = JsonConvert.SerializeObject(requestBody);
+            var bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+
+            yield return request.SendWebRequest();
+
             if (request.result != UnityWebRequest.Result.Success)
             {
                 var errorMessage = $"请求失败: {request.error}";
@@ -48,10 +45,12 @@ public partial class GameWebApi
                 {
                     errorMessage += $" (HTTP {request.responseCode})";
                 }
+
                 if (!string.IsNullOrEmpty(request.downloadHandler?.text))
                 {
                     errorMessage += $"\n响应内容: {request.downloadHandler.text}";
                 }
+
                 Debug.LogError(errorMessage);
                 callback?.Invoke(new ApiResponse<PurchaseUserGameItemReply>
                 {
@@ -62,46 +61,28 @@ public partial class GameWebApi
             }
 
             var responseContent = request.downloadHandler.text;
-            Debug.Log($"\n响应内容:\n{responseContent}\n");
+            Debug.Log($"响应内容:\n{responseContent}\n");
 
-            try
+            var settings = new JsonSerializerSettings
             {
-                var settings = new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore
-                };
-                var result = JsonConvert.DeserializeObject<ApiResponse<PurchaseUserGameItemReply>>(responseContent, settings);
+                NullValueHandling = NullValueHandling.Ignore
+            };
+            var result = JsonConvert.DeserializeObject<ApiResponse<PurchaseUserGameItemReply>>(responseContent, settings);
 
-                if (result?.Data != null)
-                {
-                    Debug.Log("道具购买信息已更新");
-                }
-                else
-                {
-                    Debug.LogWarning("响应成功但未包含道具购买数据");
-                }
-
-                callback?.Invoke(result);
-            }
-            catch (JsonException jsonEx)
+            if (result?.Data != null)
             {
-                var errorMessage = $"解析响应数据失败: {jsonEx.Message}";
-                Debug.LogError($"{errorMessage}\n响应内容: {responseContent}");
-                callback?.Invoke(new ApiResponse<PurchaseUserGameItemReply>
-                {
-                    Code = -1,
-                    Message = errorMessage
-                });
+                Debug.Log("道具购买信息已更新");
             }
+            else
+            {
+                Debug.LogWarning("响应成功但未包含道具购买数据");
+            }
+
+            callback?.Invoke(result);
         }
-        catch (Exception ex)
+        finally
         {
-            Debug.LogError($"购买道具时发生异常: {ex.Message}\n{ex.StackTrace}");
-            callback?.Invoke(new ApiResponse<PurchaseUserGameItemReply>
-            {
-                Code = -1,
-                Message = $"系统错误: {ex.Message}"
-            });
+            request.Dispose();
         }
     }
 }

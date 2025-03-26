@@ -15,27 +15,61 @@ public partial class GameWebApi
 {
     public IEnumerator ConsumeUserGameItem(string gameId, string gameItemId, Action<ApiResponse<ConsumeUserGameItemReply>> callback)
     {
-        UnityWebRequest request = null;
-        request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/userGameItems/consume", "POST");
-        
-        // 输出请求URL
-        Debug.Log($"\n请求URL: {UomaUtils.BaseUrl}/v1/userGameItems/consume");
-        
-        SetCommonHeaders(request);
+        UnityWebRequest request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/userGameItems/consume", "POST");
 
-        var requestBody = new ConsumeUserGameItemRequest
+        try
         {
-            GameId = gameId,
-            GameItemId = gameItemId
-        };
+            // 输出请求URL
+            Debug.Log($"\n请求URL: {UomaUtils.BaseUrl}/v1/userGameItems/consume");
 
-        var jsonBody = JsonConvert.SerializeObject(requestBody);
-        var bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = new DownloadHandlerBuffer();
+            SetCommonHeaders(request);
 
-        yield return request.SendWebRequest();
-        
-        request.Dispose();
+            var requestBody = new ConsumeUserGameItemRequest
+            {
+                GameId = gameId,
+                GameItemId = gameItemId
+            };
+
+            var jsonBody = JsonConvert.SerializeObject(requestBody);
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+
+            yield return request.SendWebRequest();
+
+            try
+            {
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    var errorMessage = $"请求失败: {request.error}";
+                    if (request.responseCode > 0)
+                    {
+                        errorMessage += $" (HTTP {request.responseCode})";
+                    }
+
+                    if (!string.IsNullOrEmpty(request.downloadHandler?.text))
+                    {
+                        errorMessage += $"响应内容: {request.downloadHandler.text}";
+                    }
+
+                    Debug.LogError(errorMessage);
+                    
+                    yield break;
+                }
+
+                var responseContent = request.downloadHandler.text;
+                Debug.Log($"响应内容:{responseContent}\n");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("处理响应时出错: " + e);
+            }
+            
+            
+        }
+        finally
+        {
+            request.Dispose();
+        }
     }
 }
