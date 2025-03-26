@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UomaWeb.Models;
 using Unity;
+using UnityEngine;
 
 namespace UomaWeb
 {
@@ -43,6 +44,8 @@ namespace UomaWeb
                 yield break;
             }
 
+            Debug.Log($"Before Use Item {gameName}-{itemName}-{itemId}");
+            
             // 使用道具
             yield return _gameWebApi.ConsumeUserGameItem(gameId, itemId, (response) =>
             {
@@ -51,7 +54,7 @@ namespace UomaWeb
                     callback?.Invoke((response?.Code ?? 1, 0, 0));
                     return;
                 }
-
+                
                 this.StartCoroutine(UpdateItemInfo(itemKey, callback));
             });
         }
@@ -132,9 +135,11 @@ namespace UomaWeb
                         gameState.Games[gameName].Items.ContainsKey(itemKey))
                     {
                         int.TryParse(gameState.Games[gameName].Items[itemKey].GameItemItemNum, out itemNum);
+                        
                     }
                 }
                 gameInfoUpdated = true;
+                
             });
 
             // 等待所有信息更新完成
@@ -143,6 +148,7 @@ namespace UomaWeb
                 yield return null;
             }
 
+            Debug.Log($"Item {gameName}-{itemKey}-{itemNum}");
             callback?.Invoke((0, virtualCurrency, itemNum));
         }
 

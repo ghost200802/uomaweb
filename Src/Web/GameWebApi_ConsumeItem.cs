@@ -20,7 +20,7 @@ public partial class GameWebApi
         try
         {
             // 输出请求URL
-            Debug.Log($"\n请求URL: {UomaUtils.BaseUrl}/v1/userGameItems/consume");
+            Debug.Log($"请求URL: {UomaUtils.BaseUrl}/v1/userGameItems/consume");
 
             SetCommonHeaders(request);
 
@@ -29,7 +29,7 @@ public partial class GameWebApi
                 GameId = gameId,
                 GameItemId = gameItemId
             };
-
+            
             var jsonBody = JsonConvert.SerializeObject(requestBody);
             byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -59,13 +59,17 @@ public partial class GameWebApi
 
                 var responseContent = request.downloadHandler.text;
                 Debug.Log($"响应内容:{responseContent}\n");
+                
+                callback?.Invoke(new ApiResponse<ConsumeUserGameItemReply>
+                {
+                    Code = request.responseCode > 0 ? (int)request.responseCode : -1,
+                    Message = request.downloadHandler?.text
+                });
             }
             catch (Exception e)
             {
                 Debug.LogError("处理响应时出错: " + e);
             }
-            
-            
         }
         finally
         {

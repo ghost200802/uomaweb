@@ -1,0 +1,206 @@
+{
+  "levels": {
+    "CandySweet": [
+      {
+        "gameLevelId": "1904083506381234176",
+        "gameLevelName": "第1关"
+      },
+      {
+        "gameLevelId": "1904083506406400000",
+        "gameLevelName": "第2关"
+      },
+      {
+        "gameLevelId": "1904083506427371520",
+        "gameLevelName": "第3关"
+      },
+      {
+        "gameLevelId": "1904083506452537344",
+        "gameLevelName": "第4关"
+      },
+      {
+        "gameLevelId": "1904083506473508864",
+        "gameLevelName": "第5关"
+      },
+      {
+        "gameLevelId": "1904083506494480384",
+        "gameLevelName": "第6关"
+      },
+      {
+        "gameLevelId": "1904083506515451904",
+        "gameLevelName": "第7关"
+      },
+      {
+        "gameLevelId": "1904083506540617728",
+        "gameLevelName": "第8关"
+      },
+      {
+        "gameLevelId": "1904083506565783552",
+        "gameLevelName": "第9关"
+      },
+      {
+        "gameLevelId": "1904083506590949376",
+        "gameLevelName": "第10关"
+      },
+      {
+        "gameLevelId": "1904083506611920896",
+        "gameLevelName": "第11关"
+      },
+      {
+        "gameLevelId": "1904083506632892416",
+        "gameLevelName": "第12关"
+      },
+      {
+        "gameLevelId": "1904083506658058240",
+        "gameLevelName": "第13关"
+      },
+      {
+        "gameLevelId": "1904083506679029760",
+        "gameLevelName": "第14关"
+      },
+      {
+        "gameLevelId": "1904083506700001280",
+        "gameLevelName": "第15关"
+      },
+      {
+        "gameLevelId": "1904083506725167104",
+        "gameLevelName": "第16关"
+      },
+      {
+        "gameLevelId": "1904083506750332928",
+        "gameLevelName": "第17关"
+      },
+      {
+        "gameLevelId": "1904083506775498752",
+        "gameLevelName": "第18关"
+      },
+      {
+        "gameLevelId": "1904083506800664576",
+        "gameLevelName": "第19关"
+      },
+      {
+        "gameLevelId": "1904083506821636096",
+        "gameLevelName": "第20关"
+      },
+      {
+        "gameLevelId": "1904083506842607616",
+        "gameLevelName": "第21关"
+      },
+      {
+        "gameLevelId": "1904083506867773440",
+        "gameLevelName": "第22关"
+      },
+      {
+        "gameLevelId": "1904083506892939264",
+        "gameLevelName": "第23关"
+      },
+      {
+        "gameLevelId": "1904083506918105088",
+        "gameLevelName": "第24关"
+      },
+      {
+        "gameLevelId": "1904083506943270912",
+        "gameLevelName": "第25关"
+      },
+      {
+        "gameLevelId": "1904083506964242432",
+        "gameLevelName": "第26关"
+      },
+      {
+        "gameLevelId": "1904083506989408256",
+        "gameLevelName": "第27关"
+      },
+      {
+        "gameLevelId": "1904083507014574080",
+        "gameLevelName": "第28关"
+      },
+      {
+        "gameLevelId": "1904083507043934208",
+        "gameLevelName": "第29关"
+      },
+      {
+        "gameLevelId": "1904083507073294336",
+        "gameLevelName": "第30关"
+      },
+      {
+        "gameLevelId": "1904083507098460160",
+        "gameLevelName": "第31关"
+      },
+      {
+        "gameLevelId": "1904083507127820288",
+        "gameLevelName": "第32关"
+      },
+      {
+        "gameLevelId": "1904083507157180416",
+        "gameLevelName": "第33关"
+      },
+      {
+        "gameLevelId": "1904083507186540544",
+        "gameLevelName": "第34关"
+      },
+      {
+        "gameLevelId": "1904083507211706368",
+        "gameLevelName": "第35关"
+      },
+      {
+        "gameLevelId": "1904083507236872192",
+        "gameLevelName": "第36关"
+      },
+      {
+        "gameLevelId": "1904083507262038016",
+        "gameLevelName": "第37关"
+      },
+      {
+        "gameLevelId": "1904083507291398144",
+        "gameLevelName": "第38关"
+      },
+      {
+        "gameLevelId": "1904083507324952576",
+        "gameLevelName": "第39关"
+      },
+      {
+        "gameLevelId": "1904083507350118400",
+        "gameLevelName": "第40关"
+      },
+      {
+        "gameLevelId": "1904083507379478528",
+        "gameLevelName": "第41关"
+      },
+      {
+        "gameLevelId": "1904083507408838656",
+        "gameLevelName": "第42关"
+      },
+      {
+        "gameLevelId": "1904083507434004480",
+        "gameLevelName": "第43关"
+      },
+      {
+        "gameLevelId": "1904083507459170304",
+        "gameLevelName": "第44关"
+      },
+      {
+        "gameLevelId": "1904083507501113344",
+        "gameLevelName": "第45关"
+      },
+      {
+        "gameLevelId": "1904083507543056384",
+        "gameLevelName": "第46关"
+      },
+      {
+        "gameLevelId": "1904083507572416512",
+        "gameLevelName": "第47关"
+      },
+      {
+        "gameLevelId": "1904083507597582336",
+        "gameLevelName": "第48关"
+      },
+      {
+        "gameLevelId": "1904083507622748160",
+        "gameLevelName": "第49关"
+      },
+      {
+        "gameLevelId": "1904083507647913984",
+        "gameLevelName": "第50关"
+      }
+    ]
+  }
+}

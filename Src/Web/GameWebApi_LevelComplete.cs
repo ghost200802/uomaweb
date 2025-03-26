@@ -64,6 +64,12 @@ public partial class GameWebApi
 
                 var responseContent = request.downloadHandler.text;
                 Debug.Log($"响应内容:{responseContent}\n");
+                
+                callback?.Invoke(new ApiResponse<LevelCompleteReply>
+                {
+                    Code = request.responseCode > 0 ? (int)request.responseCode : -1,
+                    Message = request.downloadHandler?.text
+                });
             }
             catch (Exception e)
             {

@@ -32,6 +32,11 @@ namespace UomaWeb
             GameDataManager.LoadLevelConfig();
         }
 
+        public static int GetVirtualCurrency()
+        {
+            return int.Parse(_uomaGame?.PlayerData?.VirtualCurrency ?? "0");
+        }
+
         public static UomaGameData GetGameState()
         {
             return _uomaGame;
@@ -56,10 +61,7 @@ namespace UomaWeb
         {
             try
             {
-                string streamingAssetsPath = Application.streamingAssetsPath; // 获取 StreamingAssets 目录
-                string configPath = Path.Combine(streamingAssetsPath, "uomaconfig", "games.json");
-                var json = File.ReadAllText(configPath);
-                _gameConfig = JsonConvert.DeserializeObject<GameConfig>(json);
+                _gameConfig = UomaGameConfig.GetConfig();
             }
             catch (Exception ex)
             {
@@ -71,10 +73,7 @@ namespace UomaWeb
         {
             try
             {
-                string streamingAssetsPath = Application.streamingAssetsPath; // 获取 StreamingAssets 目录
-                string configPath = Path.Combine(streamingAssetsPath, "uomaconfig", "items.json");
-                var json = File.ReadAllText(configPath);
-                _itemConfig = JsonConvert.DeserializeObject<ItemConfig>(json);
+                _itemConfig = UomaItemConfig.GetConfig();
             }
             catch (Exception ex)
             {
@@ -86,14 +85,11 @@ namespace UomaWeb
         {
             try
             {
-                string streamingAssetsPath = Application.streamingAssetsPath; // 获取 StreamingAssets 目录
-                string configPath = Path.Combine(streamingAssetsPath, "uomaconfig", "levels.json");
-                var json = File.ReadAllText(configPath);
-                _levelConfig = JsonConvert.DeserializeObject<LevelConfig>(json);
+                _levelConfig = UomaLevelConfig.GetConfig();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"加载物品配置失败: {ex.Message}");
+                Console.WriteLine($"加载关卡配置失败: {ex.Message}");
             }
         }
 
