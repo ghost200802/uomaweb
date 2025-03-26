@@ -10,10 +10,10 @@ namespace UomaWeb
         {
             var gameName = UomaController.Instance.GameName;
             var gameData = GameDataManager.GetGameState().Games[gameName];
-            return gameData.Levels[level];
+            return gameData.Levels[level - 1];
         }
         
-        public IEnumerator GetPlayerCurrLevel(Action<int> callback)
+        public IEnumerator GetPlayerCompleteLevel(Action<int> callback)
         {
             // 从配置中查找gameId
             var gameConfig = GameDataManager.GetGameState();
@@ -53,7 +53,7 @@ namespace UomaWeb
                     }
                 }
 
-                callback?.Invoke(highestCompletedLevel + 2); // 返回下一关
+                callback?.Invoke(highestCompletedLevel + 1); // 返回当前关（0为第1关）
             });
         }
 
@@ -75,7 +75,7 @@ namespace UomaWeb
             var levelConfig = GameDataManager.GetLevelConfig();
             if (levelConfig?.Levels != null && levelConfig.Levels.ContainsKey(gameName))
             {   
-                levelId = levelConfig.Levels[gameName][gameLevel].id;
+                levelId = levelConfig.Levels[gameName][gameLevel-1].id;
                 Console.WriteLine($"Level ID: {levelId}");
             }
 

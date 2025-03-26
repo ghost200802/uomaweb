@@ -29,9 +29,15 @@ namespace UomaWeb
             Instance = this;
         }
 
-        public IEnumerator GetCurrentLevel(System.Action<int> callback)
+        public IEnumerator GetCompleteLevel(System.Action<int> callback)
         {
-            yield return _gameHelper.GetPlayerCurrLevel(callback);
+            yield return _gameHelper.GetPlayerCompleteLevel((result)=>
+            {
+                Debug.Log($"CompleteLevel:{result}");
+                PlayerPrefs.SetInt($"{UomaUtils.Token}.{UomaController.Instance.GameName}.CompleteLevel", result);
+                PlayerPrefs.Save();
+                callback?.Invoke(result);
+            });
         }
 
         public IEnumerator CompleteLevel(int gameLevel, int star, System.Action<(int successCode, int currLevel, int currencyNum)> callback)

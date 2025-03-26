@@ -19,7 +19,7 @@ public partial class GameWebApi
         request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/userGameLevels", "POST");
         
         // 输出请求URL
-        Debug.Log($"\n请求URL: {UomaUtils.BaseUrl}/v1/userGameLevels");
+        Debug.Log($"请求URL: {UomaUtils.BaseUrl}/v1/userGameLevels");
         
         SetCommonHeaders(request);
 
@@ -61,7 +61,7 @@ public partial class GameWebApi
             }
 
             var responseContent = request.downloadHandler.text;
-            Debug.Log($"\n响应内容:\n{responseContent}\n");
+            Debug.Log($"响应内容:{responseContent}\n");
 
             try
             {
