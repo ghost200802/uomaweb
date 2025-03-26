@@ -103,12 +103,5 @@ public partial class GameWebApi
                 Message = $"系统错误: {ex.Message}"
             });
         }
-        finally
-        {
-            if (request != null)
-            {
-                request.Dispose();
-            }
-        }
     }
 }

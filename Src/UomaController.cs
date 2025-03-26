@@ -42,6 +42,9 @@ namespace UomaWeb
 
         public IEnumerator CompleteLevel(int gameLevel, int star, System.Action<(int successCode, int currLevel, int currencyNum)> callback)
         {
+            Debug.Log($"CompleteLevel:{gameLevel}");
+            PlayerPrefs.SetInt($"{UomaUtils.Token}.{UomaController.Instance.GameName}.CompleteLevel", gameLevel);
+            PlayerPrefs.Save();
             yield return _gameHelper.CompleteLevel(gameLevel, star, callback);
         }
 

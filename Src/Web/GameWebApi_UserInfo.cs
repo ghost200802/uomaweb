@@ -66,7 +66,7 @@ public partial class GameWebApi
                 // Debug.Log($"邀请码: {result.Data.InviteCode}");
                 // Debug.Log($"CNY余额: {result.Data.AvailableBalanceCny}");
                 // Debug.Log($"USD余额: {result.Data.AvailableBalanceUsd}");
-                // Debug.Log($"虚拟币: {result.Data.VirtualCurrency}");
+                Debug.Log($"虚拟币: {result.Data.VirtualCurrency}");
                 // Debug.Log($"创建时间: {result.Data.CreateTime}");
             }
             else
@@ -94,13 +94,6 @@ public partial class GameWebApi
                 Code = -1,
                 Message = $"系统错误: {ex.Message}"
             });
-        }
-        finally
-        {
-            if (request != null)
-            {
-                request.Dispose();
-            }
         }
     }
 }
