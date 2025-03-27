@@ -156,6 +156,8 @@ namespace UomaWeb
                                 VirtualCurrencyPrice = int.Parse(item.VirtualCurrencyPrice),
                                 GameItemItemNum = int.Parse(item.GameItemItemNum)
                             };
+                            PlayerPrefs.SetInt($"{UomaController.Instance.GameName}-{itemKey.ToLower()}", int.Parse(item.GameItemItemNum));
+                            PlayerPrefs.Save();
                         }
                     }
                 }
