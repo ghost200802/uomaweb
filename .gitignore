@@ -17,6 +17,7 @@ bld/
 #Unity files
 *.meta
 
+!*.cs.meta
 !*.prefab
 !*.prefab.meta
 
