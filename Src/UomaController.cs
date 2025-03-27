@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,10 +24,41 @@ namespace UomaWeb
 
         private void Awake()
         {
+            DontDestroyOnLoad(this.gameObject);
             if (gameObject != null) _gameHelper = gameObject.AddComponent<GameHelper>();
+
+            // 从URL中获取gameId参数
+            string url = Application.absoluteURL;
+            Debug.Log($"WebUrl: {url}");
+            if (!string.IsNullOrEmpty(url))
+            {
+                int idIndex = url.IndexOf("id=", StringComparison.OrdinalIgnoreCase);
+                if (idIndex != -1)
+                {
+                    string idValue = url.Substring(idIndex + 3);
+                    int endIndex = idValue.IndexOf('&');
+                    if (endIndex != -1)
+                    {
+                        idValue = idValue.Substring(0, endIndex);
+                    }
+                    gameId = idValue;
+                    Debug.Log($"从URL获取到gameId: {gameId}");
+                }
+            }
+
+            Instance = this;
+            Debug.Log($"UomaController Awake Done - {gameId}");
+        }
+
+        public void ReceivePlayerToken(string token) {
+            Debug.Log($"Received Token: {token}");
+            if (!string.IsNullOrEmpty(token))
+            {
+                UomaUtils.Token = token;
+            }
+            Debug.Log($"Use Token: {UomaUtils.Token}");
             UomaDataManager.Init();
             UomaDataManager.SetToken(UomaUtils.Token);
-            Instance = this;
         }
 
         public IEnumerator GetCompleteLevel(System.Action<int> callback)

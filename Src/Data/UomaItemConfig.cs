@@ -14,14 +14,12 @@ namespace UomaWeb
                     { "CandySweet", new Dictionary<string, ItemAction>
                         {
                             { "ExtraMoves", new ItemAction{ id = "1904083507677274112", name = "ExtraMoves"} },
-                            { "Packages", new ItemAction{ id = "1904083507677274112", name = "Packages"} },
-                            { "Stripes", new ItemAction{ id = "1904083507744382976", name = "炸弹"} },
-                            { "ExtraTime", new ItemAction{ id = "1904083507773743104", name = "消除"} },
-                            { "Bomb", new ItemAction{ id = "1904083507773743104", name = "消除"} },
-                            { "MulticolorCandy", new ItemAction{ id = "1904083507773743104", name = "消除"} },
-                            { "FreeMove", new ItemAction{ id = "1904083507773743104", name = "消除"} },
-                            { "ExplodeArea", new ItemAction{ id = "1904083507773743104", name = "消除"} },
-                            { "Marmalade", new ItemAction{ id = "1904083507773743104", name = "消除"} }
+                            { "Stripes", new ItemAction{ id = "1904083507719217152", name = "Stripes"} },
+                            { "Bomb", new ItemAction{ id = "1904083507744382976", name = "Bomb"} },
+                            { "MulticolorCandy", new ItemAction{ id = "1904083507773743104", name = "MulticolorCandy"} },
+                            { "FreeMove", new ItemAction{ id = "1905122217961234432", name = "FreeMove"} },
+                            { "ExplodeArea", new ItemAction{ id = "1905122218015760384", name = "ExplodeArea"} },
+                            { "Marmalade", new ItemAction{ id = "1905122218045120512", name = "Marmalade"} }
                         }
                     },
                     { "Snail", new Dictionary<string, ItemAction>
