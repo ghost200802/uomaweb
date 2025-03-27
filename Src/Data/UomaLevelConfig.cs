@@ -11,6 +11,41 @@ namespace UomaWeb
             {
                 Levels = new Dictionary<string, List<LevelAction>>
                 {
+                    { "ScrewRemoval", new List<LevelAction>
+                        {
+                            new LevelAction { id = "1904079870133575680", name = "第1关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870171324416", name = "第2关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870200684544", name = "第3关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870230044672", name = "第4关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870259404800", name = "第5关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870288764928", name = "第6关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870318125056", name = "第7关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870347485184", name = "第8关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870381039616", name = "第9关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870410399744", name = "第10关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870439759872", name = "第11关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870469120000", name = "第12关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870498480128", name = "第13关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870527840256", name = "第14关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870557200384", name = "第15关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870586560512", name = "第16关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870615920640", name = "第17关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870645280768", name = "第18关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870678835200", name = "第19关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870708195328", name = "第20关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870733361152", name = "第21关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870762721280", name = "第22关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870792081408", name = "第23关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870850801664", name = "第24关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870884356096", name = "第25关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870913716224", name = "第26关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870943076352", name = "第27关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079870989213696", name = "第28关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079871052128256", name = "第29关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904079871089876992", name = "第30关", isComplete = 0, gameLevelStar = "0" },
+                            new LevelAction { id = "1904416925304791040", name = "第31关", isComplete = 0, gameLevelStar = "0" }
+                        }
+                    },
                     { "CandySweet", new List<LevelAction>
                         {
                             new LevelAction { id = "1904083506381234176", name = "第1关" },

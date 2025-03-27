@@ -22,7 +22,7 @@ namespace UomaWeb
                             { "Marmalade", new ItemAction{ id = "1905122218045120512", name = "Marmalade"} }
                         }
                     },
-                    { "Snail", new Dictionary<string, ItemAction>
+                    { "ScrewRemoval", new Dictionary<string, ItemAction>
                         {
                             { "unlock", new ItemAction{ id = "1900022219774926848", name = "解锁钉子孔"} },
                             { "skip", new ItemAction{ id = "1900022221792387072", name = "跳关"} },

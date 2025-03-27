@@ -201,6 +201,194 @@
         "gameLevelId": "1904083507647913984",
         "gameLevelName": "第50关"
       }
+    ],
+    "ScrewRemoval":[
+      {
+        "gameLevelId": "1904079870133575680",
+        "gameLevelName": "第1关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870171324416",
+        "gameLevelName": "第2关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870200684544",
+        "gameLevelName": "第3关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870230044672",
+        "gameLevelName": "第4关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870259404800",
+        "gameLevelName": "第5关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870288764928",
+        "gameLevelName": "第6关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870318125056",
+        "gameLevelName": "第7关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870347485184",
+        "gameLevelName": "第8关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870381039616",
+        "gameLevelName": "第9关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870410399744",
+        "gameLevelName": "第10关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870439759872",
+        "gameLevelName": "第11关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870469120000",
+        "gameLevelName": "第12关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870498480128",
+        "gameLevelName": "第13关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870527840256",
+        "gameLevelName": "第14关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870557200384",
+        "gameLevelName": "第15关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870586560512",
+        "gameLevelName": "第16关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870615920640",
+        "gameLevelName": "第17关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870645280768",
+        "gameLevelName": "第18关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870678835200",
+        "gameLevelName": "第19关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870708195328",
+        "gameLevelName": "第20关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870733361152",
+        "gameLevelName": "第21关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870762721280",
+        "gameLevelName": "第22关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870792081408",
+        "gameLevelName": "第23关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870850801664",
+        "gameLevelName": "第24关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870884356096",
+        "gameLevelName": "第25关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870913716224",
+        "gameLevelName": "第26关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870943076352",
+        "gameLevelName": "第27关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079870989213696",
+        "gameLevelName": "第28关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079871052128256",
+        "gameLevelName": "第29关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904079871089876992",
+        "gameLevelName": "第30关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      },
+      {
+        "gameLevelId": "1904416925304791040",
+        "gameLevelName": "第31关",
+        "isComplete": 0,
+        "gameLevelStar": "0"
+      }
     ]
   }
 }

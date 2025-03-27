@@ -18,7 +18,7 @@ namespace UomaWeb
                             description = "一款经典的三消类游戏"
                         }
                     },
-                    { "Snail", new Game
+                    { "ScrewRemoval", new Game
                         {
                             id = "1904079869357629440",
                             name = "钉钉子",
