@@ -34,7 +34,7 @@ namespace UomaWeb.Models
     public class GameItemData
     {
         public int IsFree { get; set; }
-        public string VirtualCurrencyPrice { get; set; }
-        public string GameItemItemNum { get; set; }
+        public int VirtualCurrencyPrice { get; set; }
+        public int GameItemItemNum { get; set; }
     }
 }

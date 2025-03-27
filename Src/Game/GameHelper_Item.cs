@@ -9,6 +9,23 @@ namespace UomaWeb
 {
     public partial class GameHelper
     {
+        public static int GetItemPrice(string itemName)
+        {
+            try
+            {
+                var gameName = UomaController.Instance.GameName;
+                var gameData = UomaDataManager.GetState()?.Games[gameName];
+                var gameDataItems = gameData?.Items;
+                return gameDataItems?[itemName.ToLower()]?.VirtualCurrencyPrice ?? -1;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return -1;
+        }
+        
         public IEnumerator UseGameItem(string itemName, Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
             // 从配置中查找gameId和itemId
@@ -134,8 +151,7 @@ namespace UomaWeb
                     if (gameState.Games.ContainsKey(gameName) && 
                         gameState.Games[gameName].Items.ContainsKey(itemKey))
                     {
-                        int.TryParse(gameState.Games[gameName].Items[itemKey].GameItemItemNum, out itemNum);
-                        
+                        itemNum = gameState.Games[gameName].Items[itemKey].GameItemItemNum;
                     }
                 }
                 gameInfoUpdated = true;
@@ -179,8 +195,7 @@ namespace UomaWeb
                 {
                     foreach (var item in gameState.Games[gameName].Items)
                     {
-                        int.TryParse(item.Value.GameItemItemNum, out int num);
-                        result[item.Key] = num;
+                        result[item.Key] = item.Value.GameItemItemNum;
                     }
                 }
 

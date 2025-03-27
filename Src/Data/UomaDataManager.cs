@@ -153,8 +153,8 @@ namespace UomaWeb
                             _uomaState.Games[gameName].Items[itemKey] = new GameItemData
                             {
                                 IsFree = item.IsFree,
-                                VirtualCurrencyPrice = item.VirtualCurrencyPrice,
-                                GameItemItemNum = item.GameItemItemNum
+                                VirtualCurrencyPrice = int.Parse(item.VirtualCurrencyPrice),
+                                GameItemItemNum = int.Parse(item.GameItemItemNum)
                             };
                         }
                     }
