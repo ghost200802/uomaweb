@@ -15,12 +15,25 @@ public partial class GameWebApi
 {
     public IEnumerator PurchaseUserGameItem(string gameId, string gameItemId, string gameItemItemNum, Action<ApiResponse<PurchaseUserGameItemReply>> callback)
     {
+        string requestUrl = $"{UomaUtils.BaseUrl}/v1/userGameItems/purchase";
+        string requestKey = GetRequestKey(nameof(PurchaseUserGameItem));
         UnityWebRequest request = null;
-        request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/userGameItems/purchase", "POST");
+
+        
         try
         {
+            if (IsRequestInProgress(requestKey))
+            {
+                Debug.Log($"请求已在进行中: {requestUrl}");
+                yield break;
+            }
+
+            SetRequestInProgress(requestKey, true);
+        
+            request = new UnityWebRequest(requestUrl, "POST");
+            
             // 输出请求URL
-            Debug.Log($"请求URL: {UomaUtils.BaseUrl}/v1/userGameItems/purchase");
+            Debug.Log($"请求URL: {requestUrl}");
 
             SetCommonHeaders(request);
 
@@ -82,7 +95,8 @@ public partial class GameWebApi
         }
         finally
         {
-            request.Dispose();
+            request?.Dispose();
+            SetRequestInProgress(requestKey, false);
         }
     }
 }

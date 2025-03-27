@@ -24,6 +24,7 @@ namespace UomaWeb.Models
         public string GameLevelId { get; set; }
         public string GameLevelName { get; set; }
         public int IsComplete { get; set; }
+        public int GameLevelStar { get; set; }
     }
 
     public class GameItemInfo

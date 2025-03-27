@@ -48,6 +48,9 @@ namespace UomaWeb
 
             Instance = this;
             Debug.Log($"UomaController Awake Done - {gameId}");
+#if UNITY_EDITOR
+            ReceivePlayerToken(null);
+#endif
         }
 
         public void ReceivePlayerToken(string token) {
@@ -74,13 +77,6 @@ namespace UomaWeb
 
         public IEnumerator CompleteLevel(int gameLevel, int star, System.Action<(int successCode, int currLevel, int currencyNum)> callback)
         {
-            Debug.Log($"CompleteLevel:{gameLevel}");
-            var completeLevel = PlayerPrefs.GetInt($"{UomaUtils.Token}.{UomaController.Instance.GameName}.CompleteLevel", 0);
-            if (gameLevel > completeLevel)
-            {
-                PlayerPrefs.SetInt($"{UomaUtils.Token}.{UomaController.Instance.GameName}.CompleteLevel", gameLevel);
-                PlayerPrefs.Save();
-            }
             yield return _gameHelper.CompleteLevel(gameLevel, star, callback);
         }
 

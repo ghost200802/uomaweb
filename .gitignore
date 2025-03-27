@@ -17,6 +17,9 @@ bld/
 #Unity files
 *.meta
 
+!*.prefab
+!*.prefab.meta
+
 # Visual Studio files
 .vs/
 *.user

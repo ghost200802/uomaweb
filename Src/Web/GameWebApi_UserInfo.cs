@@ -15,8 +15,18 @@ public partial class GameWebApi
 {
     public IEnumerator GetUserInfo(Action<ApiResponse<UserInfo>> callback)
     {
+        string requestUrl = $"{UomaUtils.BaseUrl}/v1/users";
+        string requestKey = GetRequestKey(nameof(GetUserInfo));
+
+        // if (IsRequestInProgress(requestKey))
+        // {
+        //     Debug.Log($"请求已在进行中: {requestUrl}");
+        //     yield break;
+        // }
+
+        SetRequestInProgress(requestKey, true);
         UnityWebRequest request = null;
-        request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/users", "GET");
+        request = new UnityWebRequest(requestUrl, "GET");
         try
         {
             // 输出请求URL
@@ -87,6 +97,7 @@ public partial class GameWebApi
         finally
         {
             request.Dispose();
+            SetRequestInProgress(requestKey, false);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace UomaWeb.Models
 
     public class LevelCompleteReply
     {
-        // 根据实际响应数据结构添加属性
+        public int Code = 0;
+        public string Message = "";
     }
 }

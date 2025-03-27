@@ -13,6 +13,32 @@ using UnityEngine.Networking;
 
 public partial class GameWebApi
 {
+    private readonly Dictionary<string, long> _requestInProgress = new Dictionary<string, long>();
+
+    private bool IsRequestInProgress(string requestKey)
+    {
+        if (!_requestInProgress.ContainsKey(requestKey))
+            return false;
+
+        var lastRequestTime = _requestInProgress[requestKey];
+        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        var timeDiff = currentTime - lastRequestTime;
+
+        return timeDiff < 2000; // 小于2秒不允许重发
+    }
+
+    private void SetRequestInProgress(string requestKey, bool inProgress)
+    {
+        if (inProgress)
+            _requestInProgress[requestKey] = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        else
+            _requestInProgress.Remove(requestKey);
+    }
+
+    private string GetRequestKey(string functionName)
+    {
+        return $"function:{functionName}";
+    }
     private void SetCommonHeaders(UnityWebRequest request)
     {
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();

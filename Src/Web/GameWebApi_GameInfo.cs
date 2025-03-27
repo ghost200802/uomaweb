@@ -14,15 +14,22 @@ public partial class GameWebApi
 {
     public IEnumerator GetGameInfo(Action<ApiResponse<GameInfo>> callback)
     {
-        var gameName = UomaController.Instance.GameName;
-        var gameId = UomaController.Instance.GameId;
-        
-        UnityWebRequest request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/games/{gameId}", "GET");
+        string requestUrl = $"{UomaUtils.BaseUrl}/v1/games/{UomaController.Instance.GameId}";        
+        string requestKey = GetRequestKey(nameof(GetGameInfo));
+        UnityWebRequest request = null;
         try
         {
-        
+            // if (IsRequestInProgress(requestKey))
+            // {
+            //     Debug.Log($"请求已在进行中: {requestUrl}");
+            //     yield break;
+            // }
+            
+            SetRequestInProgress(requestKey, true);
+            
+            request = new UnityWebRequest(requestUrl, "GET");
             // 输出请求URL
-            Debug.Log($"请求URL: {UomaUtils.BaseUrl}/v1/games/{gameId}");
+            Debug.Log($"请求URL: {requestUrl}");
             
             SetCommonHeaders(request);
             request.downloadHandler = new DownloadHandlerBuffer();
@@ -78,7 +85,8 @@ public partial class GameWebApi
         }
         finally
         {
-                request.Dispose();
+            SetRequestInProgress(requestKey, false);
+            request?.Dispose();
         }
     }
 }

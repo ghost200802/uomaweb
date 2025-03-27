@@ -15,7 +15,17 @@ public partial class GameWebApi
 {
     public IEnumerator ConsumeUserGameItem(string gameId, string gameItemId, Action<ApiResponse<ConsumeUserGameItemReply>> callback)
     {
-        UnityWebRequest request = new UnityWebRequest($"{UomaUtils.BaseUrl}/v1/userGameItems/consume", "POST");
+        string requestUrl = $"{UomaUtils.BaseUrl}/v1/userGameItems/consume";
+        string requestKey = GetRequestKey(nameof(ConsumeUserGameItem));
+
+        if (IsRequestInProgress(requestKey))
+        {
+            Debug.Log($"请求已在进行中: {requestUrl}");
+            yield break;
+        }
+
+        SetRequestInProgress(requestKey, true);
+        UnityWebRequest request = new UnityWebRequest(requestUrl, "POST");
 
         try
         {
@@ -74,6 +84,7 @@ public partial class GameWebApi
         finally
         {
             request.Dispose();
+            SetRequestInProgress(requestKey, false);
         }
     }
 }

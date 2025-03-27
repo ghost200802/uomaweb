@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UomaWeb.Models;
+using UnityEngine;
 
 namespace UomaWeb
 {
@@ -8,9 +9,13 @@ namespace UomaWeb
     {
         public static GameLevelData GetLevelData(int level)
         {
-            var gameName = UomaController.Instance.GameName;
-            var gameData = UomaDataManager.GetState().Games[gameName];
-            return gameData.Levels[level - 1];
+            if (UomaDataManager.CheckGameData())
+            {
+                var levelDatas = UomaDataManager.GetState()?.Games[UomaController.Instance.GameName]?.Levels;
+                return levelDatas?.Count > level ? levelDatas[level - 1] : null;
+            }
+
+            return null;
         }
         
         public IEnumerator GetPlayerCompleteLevel(Action<int> callback)
@@ -86,12 +91,20 @@ namespace UomaWeb
             }
 
             // 提交通关信息
-            yield return _gameWebApi.LevelComplete(gameId, levelId, star.ToString(), (response) =>
+            yield return _gameWebApi.LevelComplete(gameId, levelId, star, (response) =>
             {
                 if (response?.Code != 200)
                 {
                     callback?.Invoke((response?.Code ?? 1, 0, 0));
                     return;
+                }
+                
+                Debug.Log($"CompleteLevel:{gameLevel}");
+                var completeLevel = PlayerPrefs.GetInt($"{UomaUtils.Token}.{UomaController.Instance.GameName}.CompleteLevel", 0);
+                if (gameLevel > completeLevel)
+                {
+                    PlayerPrefs.SetInt($"{UomaUtils.Token}.{UomaController.Instance.GameName}.CompleteLevel", gameLevel);
+                    PlayerPrefs.Save();
                 }
 
                 StartCoroutine(UpdateLevelInfo(callback));

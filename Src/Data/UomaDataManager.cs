@@ -37,9 +37,9 @@ namespace UomaWeb
             return int.Parse(_uomaState?.PlayerData?.VirtualCurrency ?? "0");
         }
 
-        public static bool HasGameData()
+        public static bool CheckGameData()
         {
-            return _uomaState.Games[UomaController.Instance.GameName] != null;
+            return _uomaState?.Games.ContainsKey(UomaController.Instance.GameName) == true;
         }
         
         public static UomaData GetState()
@@ -197,7 +197,8 @@ namespace UomaWeb
                                 {
                                     Id = levelId,
                                     Name = _levelConfig.Levels[gameName][levelNum].name,
-                                    IsComplete = level.IsComplete
+                                    IsComplete = level.IsComplete,
+                                    GameLevelStar = level.GameLevelStar
                                 };
                             }
                             else
@@ -206,7 +207,8 @@ namespace UomaWeb
                                 {
                                     Id = levelId,
                                     Name = _levelConfig.Levels[gameName][levelNum].name,
-                                    IsComplete = level.IsComplete
+                                    IsComplete = level.IsComplete,
+                                    GameLevelStar = level.GameLevelStar
                                 });
                             }
                         }

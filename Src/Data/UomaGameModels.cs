@@ -29,6 +29,7 @@ namespace UomaWeb.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public int IsComplete { get; set; }
+        public int GameLevelStar { get; set; }
     }
 
     public class GameItemData
