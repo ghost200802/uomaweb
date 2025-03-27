@@ -9,14 +9,14 @@ namespace UomaWeb
         public static GameLevelData GetLevelData(int level)
         {
             var gameName = UomaController.Instance.GameName;
-            var gameData = GameDataManager.GetGameState().Games[gameName];
+            var gameData = UomaDataManager.GetState().Games[gameName];
             return gameData.Levels[level - 1];
         }
         
         public IEnumerator GetPlayerCompleteLevel(Action<int> callback)
         {
             // 从配置中查找gameId
-            var gameConfig = GameDataManager.GetGameState();
+            var gameConfig = UomaDataManager.GetState();
 
             var gameName = UomaController.Instance.GameName;
             var gameId = UomaController.Instance.GameId;
@@ -37,7 +37,7 @@ namespace UomaWeb
                 }
 
                 // 查找最高通关关卡
-                var gameData = GameDataManager.GetGameState().Games[gameName];
+                var gameData = UomaDataManager.GetState().Games[gameName];
                 if (gameData?.Levels == null)
                 {
                     callback?.Invoke(1);
@@ -72,7 +72,7 @@ namespace UomaWeb
             }
 
             // 从配置中查找levelId
-            var levelConfig = GameDataManager.GetLevelConfig();
+            var levelConfig = UomaDataManager.GetLevelConfig();
             if (levelConfig?.Levels != null && levelConfig.Levels.ContainsKey(gameName))
             {   
                 levelId = levelConfig.Levels[gameName][gameLevel-1].id;
@@ -113,8 +113,8 @@ namespace UomaWeb
             {
                 if (userResponse?.Data != null)
                 {
-                    GameDataManager.UpdateUserData(userResponse.Data);
-                    int.TryParse(GameDataManager.GetGameState().PlayerData?.VirtualCurrency, out virtualCurrency);
+                    UomaDataManager.UpdateUserData(userResponse.Data);
+                    int.TryParse(UomaDataManager.GetState().PlayerData?.VirtualCurrency, out virtualCurrency);
                 }
                 userInfoUpdated = true;
             });
@@ -124,8 +124,8 @@ namespace UomaWeb
             {
                 if (gameResponse?.Data != null)
                 {
-                    GameDataManager.UpdateGameData(gameResponse.Data);
-                    var gameState = GameDataManager.GetGameState();
+                    UomaDataManager.UpdateGameData(gameResponse.Data);
+                    var gameState = UomaDataManager.GetState();
                     if (gameState.Games.ContainsKey(gameName) && gameState.Games[gameName].Levels != null)
                     {
                         int highestCompletedLevel = -1;

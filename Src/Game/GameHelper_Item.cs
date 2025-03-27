@@ -12,7 +12,7 @@ namespace UomaWeb
         public IEnumerator UseGameItem(string itemName, Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
             // 从配置中查找gameId和itemId
-            var gameConfig = GameDataManager.GetGameState();
+            var gameConfig = UomaDataManager.GetState();
 
             var gameName = UomaController.Instance.GameName;
             var gameId = UomaController.Instance.GameId;
@@ -28,7 +28,7 @@ namespace UomaWeb
                 yield break;
             }
 
-            foreach (var item in GameDataManager.GetItemConfig().Items[gameName])
+            foreach (var item in UomaDataManager.GetItemConfig().Items[gameName])
             {
                 if (item.Key.ToLower() == itemName.ToLower())
                 {
@@ -74,7 +74,7 @@ namespace UomaWeb
                 yield break;
             }
 
-            foreach (var item in GameDataManager.GetItemConfig().Items[gameName])
+            foreach (var item in UomaDataManager.GetItemConfig().Items[gameName])
             {
                 if (item.Key.ToLower() == itemName.ToLower())
                 {
@@ -118,8 +118,8 @@ namespace UomaWeb
             {
                 if (userResponse?.Data != null)
                 {
-                    GameDataManager.UpdateUserData(userResponse.Data);
-                    int.TryParse(GameDataManager.GetGameState().PlayerData?.VirtualCurrency, out virtualCurrency);
+                    UomaDataManager.UpdateUserData(userResponse.Data);
+                    int.TryParse(UomaDataManager.GetState().PlayerData?.VirtualCurrency, out virtualCurrency);
                 }
                 userInfoUpdated = true;
             });
@@ -129,8 +129,8 @@ namespace UomaWeb
             {
                 if (gameResponse?.Data != null)
                 {
-                    GameDataManager.UpdateGameData(gameResponse.Data);
-                    var gameState = GameDataManager.GetGameState();
+                    UomaDataManager.UpdateGameData(gameResponse.Data);
+                    var gameState = UomaDataManager.GetState();
                     if (gameState.Games.ContainsKey(gameName) && 
                         gameState.Games[gameName].Items.ContainsKey(itemKey))
                     {
@@ -174,7 +174,7 @@ namespace UomaWeb
                 }
 
                 var result = new Dictionary<string, int>();
-                var gameState = GameDataManager.GetGameState();
+                var gameState = UomaDataManager.GetState();
                 if (gameState.Games.ContainsKey(gameName))
                 {
                     foreach (var item in gameState.Games[gameName].Items)

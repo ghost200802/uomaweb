@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace UomaWeb.Models
 {
-    public class UomaGameData
+    public class UomaData
     {
         public string Token { get; set; }
         public PlayerData PlayerData { get; set; }

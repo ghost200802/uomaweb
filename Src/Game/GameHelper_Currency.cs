@@ -12,8 +12,8 @@ namespace UomaWeb
             {
                 if (response?.Data != null)
                 {
-                    GameDataManager.UpdateUserData(response.Data);
-                    int.TryParse(GameDataManager.GetGameState().PlayerData?.VirtualCurrency, out int virtualCurrency);
+                    UomaDataManager.UpdateUserData(response.Data);
+                    int.TryParse(UomaDataManager.GetState().PlayerData?.VirtualCurrency, out int virtualCurrency);
                     callback?.Invoke(virtualCurrency);
                 }
                 else

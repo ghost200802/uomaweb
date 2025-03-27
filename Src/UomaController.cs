@@ -24,8 +24,8 @@ namespace UomaWeb
         private void Awake()
         {
             if (gameObject != null) _gameHelper = gameObject.AddComponent<GameHelper>();
-            GameDataManager.Init();
-            GameDataManager.SetToken(UomaUtils.Token);
+            UomaDataManager.Init();
+            UomaDataManager.SetToken(UomaUtils.Token);
             Instance = this;
         }
 

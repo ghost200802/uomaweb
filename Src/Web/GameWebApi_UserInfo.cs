@@ -62,7 +62,7 @@ public partial class GameWebApi
     
                 if (result?.Data != null)
                 {
-                    GameDataManager.UpdateUserData(result.Data);
+                    UomaDataManager.UpdateUserData(result.Data);
                     Debug.Log("用户信息已更新");
                     // Debug.Log("收到用户信息");
                     // Debug.Log("解析后的用户信息:");

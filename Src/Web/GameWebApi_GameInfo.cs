@@ -62,7 +62,7 @@ public partial class GameWebApi
 
                 if (result?.Data != null)
                 {
-                    GameDataManager.UpdateGameData(result.Data);
+                    UomaDataManager.UpdateGameData(result.Data);
                     Debug.Log("游戏信息已更新");
                 }
                 else

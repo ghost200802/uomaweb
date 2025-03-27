@@ -19,7 +19,7 @@ public partial class GameWebApi
         var nonce = GenerateNonce();
         var sign = GenerateSign(nonce, UomaUtils.Token, timestamp);
 
-        GameDataManager.SetToken(UomaUtils.Token);
+        UomaDataManager.SetToken(UomaUtils.Token);
 
         request.SetRequestHeader("timestamp", timestamp);
         request.SetRequestHeader("token", UomaUtils.Token);

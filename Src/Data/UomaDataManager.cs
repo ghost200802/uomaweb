@@ -8,16 +8,16 @@ using UnityEngine;
 
 namespace UomaWeb
 {
-    public static class GameDataManager
+    public static class UomaDataManager
     {
         private static ItemConfig _itemConfig;
         private static LevelConfig _levelConfig;
         private static GameConfig _gameConfig;
-        private static UomaGameData _uomaGame;
+        private static UomaData _uomaState;
 
         private static void InitializeUomaGameData()
         {
-            _uomaGame = new UomaGameData
+            _uomaState = new UomaData
             {
                 Games = new Dictionary<string, GameData>(),
                 PlayerData = null,//new PlayerData()
@@ -26,20 +26,25 @@ namespace UomaWeb
 
         public static void Init()
         {
-            GameDataManager.InitializeUomaGameData();
-            GameDataManager.LoadGameConfig();
-            GameDataManager.LoadItemConfig();
-            GameDataManager.LoadLevelConfig();
+            UomaDataManager.InitializeUomaGameData();
+            UomaDataManager.LoadGameConfig();
+            UomaDataManager.LoadItemConfig();
+            UomaDataManager.LoadLevelConfig();
         }
 
         public static int GetVirtualCurrency()
         {
-            return int.Parse(_uomaGame?.PlayerData?.VirtualCurrency ?? "0");
+            return int.Parse(_uomaState?.PlayerData?.VirtualCurrency ?? "0");
         }
 
-        public static UomaGameData GetGameState()
+        public static bool HasGameData()
         {
-            return _uomaGame;
+            return _uomaState.Games[UomaController.Instance.GameName] != null;
+        }
+        
+        public static UomaData GetState()
+        {
+            return _uomaState;
         }
 
         public static GameConfig GetGameConfig()
@@ -95,12 +100,12 @@ namespace UomaWeb
 
         public static void SetToken(string token)
         {
-            if(_uomaGame.Token != null && _uomaGame.Token != token)
+            if(_uomaState.Token != null && _uomaState.Token != token)
             {
                 Console.WriteLine("Token已更改");
                 InitializeUomaGameData();
             }
-            _uomaGame.Token = token;
+            _uomaState.Token = token;
         }
 
         public static void UpdateGameData(GameInfo gameInfo)
@@ -113,9 +118,9 @@ namespace UomaWeb
             // 如果找到对应的游戏key，使用它来更新数据
             if (gameName != null)
             {
-                if (!_uomaGame.Games.ContainsKey(gameName))
+                if (!_uomaState.Games.ContainsKey(gameName))
                 {
-                    _uomaGame.Games[gameName] = new GameData
+                    _uomaState.Games[gameName] = new GameData
                     {
                         Items = new Dictionary<string, GameItemData>()
                     };
@@ -145,7 +150,7 @@ namespace UomaWeb
                         // 如果找到对应的道具key，使用它来更新数据
                         if (itemKey != null)
                         {
-                            _uomaGame.Games[gameName].Items[itemKey] = new GameItemData
+                            _uomaState.Games[gameName].Items[itemKey] = new GameItemData
                             {
                                 IsFree = item.IsFree,
                                 VirtualCurrencyPrice = item.VirtualCurrencyPrice,
@@ -178,17 +183,17 @@ namespace UomaWeb
                         }
 
                         // 确保Levels列表已初始化
-                        if (_uomaGame.Games[gameName].Levels == null)
+                        if (_uomaState.Games[gameName].Levels == null)
                         {
-                            _uomaGame.Games[gameName].Levels = new List<GameLevelData>();
+                            _uomaState.Games[gameName].Levels = new List<GameLevelData>();
                         }
 
                         // 如果找到对应的关卡，更新数据；否则添加新关卡
                         if (levelId != null)
                         {
-                            if (levelNum < _uomaGame.Games[gameName].Levels.Count)
+                            if (levelNum < _uomaState.Games[gameName].Levels.Count)
                             {
-                                _uomaGame.Games[gameName].Levels[levelNum] = new GameLevelData
+                                _uomaState.Games[gameName].Levels[levelNum] = new GameLevelData
                                 {
                                     Id = levelId,
                                     Name = _levelConfig.Levels[gameName][levelNum].name,
@@ -197,7 +202,7 @@ namespace UomaWeb
                             }
                             else
                             {
-                                _uomaGame.Games[gameName].Levels.Add(new GameLevelData
+                                _uomaState.Games[gameName].Levels.Add(new GameLevelData
                                 {
                                     Id = levelId,
                                     Name = _levelConfig.Levels[gameName][levelNum].name,
@@ -214,7 +219,7 @@ namespace UomaWeb
         {
             if (userInfo == null) return;
 
-            _uomaGame.PlayerData = new PlayerData
+            _uomaState.PlayerData = new PlayerData
             {
                 InviteCode = userInfo.InviteCode,
                 LoginCountryId = userInfo.LoginCountryId,
