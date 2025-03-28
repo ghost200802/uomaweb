@@ -24,9 +24,9 @@ namespace UomaWeb
                     },
                     { "ScrewRemoval", new Dictionary<string, ItemAction>
                         {
-                            { "unlock", new ItemAction{ id = "1900022219774926848", name = "解锁钉子孔"} },
-                            { "skip", new ItemAction{ id = "1900022221792387072", name = "跳关"} },
-                            { "guide", new ItemAction{ id = "1900022225047166976", name = "攻略"} }
+                            { "unlock", new ItemAction{ id = "1904079871152791552", name = "解锁钉子孔"} },
+                            { "skip", new ItemAction{ id = "1904079871119237120", name = "跳关"} },
+                            { "guide", new ItemAction{ id = "1904383674548789248", name = "攻略"} }
                         }
                     }
                 }
