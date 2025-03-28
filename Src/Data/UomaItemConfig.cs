@@ -28,6 +28,12 @@ namespace UomaWeb
                             { "skip", new ItemAction{ id = "1904079871119237120", name = "跳关"} },
                             { "guide", new ItemAction{ id = "1904383674548789248", name = "攻略"} }
                         }
+                    },
+                    { "WaterSort", new Dictionary<string, ItemAction>
+                        {
+                            { "skip", new ItemAction{ id = "1904084069114224640", name = "下一关"} },
+                            { "undo", new ItemAction{ id = "1904084069156167680", name = "上一步"} }
+                        }
                     }
                 }
             };

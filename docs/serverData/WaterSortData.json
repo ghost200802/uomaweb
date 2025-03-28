@@ -1,0 +1,158 @@
+{
+    "code": 200,
+    "data": {
+        "gameId": "1904084067851739136",
+        "gameName": "倒倒水",
+        "gameImg": [
+            "https://cdn.hkchunce.com/res/shortv/2024/11/22/431e8c97bf2b429b87affc47add68c3b.jpg"
+        ],
+        "gameDetail": "倒倒水",
+        "gameUrl": "https://www.uoma.com/game2",
+        "gameLevel": [
+            {
+                "gameLevelId": "1904084068396998656",
+                "gameLevelName": "第1关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068556382208",
+                "gameLevelName": "第2关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068581548032",
+                "gameLevelName": "第3关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068610908160",
+                "gameLevelName": "第4关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068640268288",
+                "gameLevelName": "第5关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068669628416",
+                "gameLevelName": "第6关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068698988544",
+                "gameLevelName": "第7关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068724154368",
+                "gameLevelName": "第8关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068749320192",
+                "gameLevelName": "第9关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068782874624",
+                "gameLevelName": "第10关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068812234752",
+                "gameLevelName": "第11关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068841594880",
+                "gameLevelName": "第12关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068866760704",
+                "gameLevelName": "第13关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068900315136",
+                "gameLevelName": "第14关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068925480960",
+                "gameLevelName": "第15关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068959035392",
+                "gameLevelName": "第16关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084068992589824",
+                "gameLevelName": "第17关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084069021949952",
+                "gameLevelName": "第18关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084069055504384",
+                "gameLevelName": "第19关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            },
+            {
+                "gameLevelId": "1904084069084864512",
+                "gameLevelName": "第20关",
+                "isComplete": 0,
+                "gameLevelStar": "0"
+            }
+        ],
+        "gameItem": [
+            {
+                "gameItemId": "1904084069114224640",
+                "gameItemName": "下一关",
+                "gameItemImg": [
+                    "https://cdn.hkchunce.com/res/shortv/2024/11/22/431e8c97bf2b429b87affc47add68c3b.jpg"
+                ],
+                "gameItemDetail": "这是一个下一关道具",
+                "isFree": 0,
+                "virtualCurrencyPrice": "5",
+                "gameItemItemNum": "0"
+            },
+            {
+                "gameItemId": "1904084069156167680",
+                "gameItemName": "上一步",
+                "gameItemImg": [
+                    "https://cdn.hkchunce.com/res/shortv/2024/11/22/431e8c97bf2b429b87affc47add68c3b.jpg"
+                ],
+                "gameItemDetail": "这是一个上一步道具",
+                "isFree": 0,
+                "virtualCurrencyPrice": "1",
+                "gameItemItemNum": "0"
+            }
+        ]
+    }
+}

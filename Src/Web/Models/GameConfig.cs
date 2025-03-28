@@ -4,10 +4,10 @@ namespace UomaWeb.Models
 {
     public class GameConfig
     {
-        public Dictionary<string, Game> Games { get; set; }
+        public Dictionary<string, GameAction> Games { get; set; }
     }
 
-    public class Game
+    public class GameAction
     {
         public string id { get; set; }
         public string name { get; set; }
