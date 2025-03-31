@@ -67,6 +67,8 @@ namespace UomaWeb
             var gameName = UomaController.Instance.GameName;
             var gameId = UomaController.Instance.GameId;
             
+            Debug.Log($"LevelComplete: {gameLevel} | Star: {star}");
+            
             // 从配置中查找gameId和levelId
             string levelId = null;
 
@@ -76,11 +78,11 @@ namespace UomaWeb
                 yield break;
             }
 
-            // 从配置中查找levelId
-            var levelConfig = UomaDataManager.GetLevelConfig();
-            if (levelConfig?.Levels != null && levelConfig.Levels.ContainsKey(gameName))
+            // 从游戏数据中获取levelId
+            var gameData = UomaDataManager.GetState()?.Games[gameName];
+            if (gameData?.Levels != null && gameData.Levels.Count >= gameLevel)
             {   
-                levelId = levelConfig.Levels[gameName][gameLevel-1].id;
+                levelId = gameData.Levels[gameLevel-1].Id;
                 Console.WriteLine($"Level ID: {levelId}");
             }
 

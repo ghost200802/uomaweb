@@ -11,7 +11,6 @@ namespace UomaWeb
     public static class UomaDataManager
     {
         private static ItemConfig _itemConfig;
-        private static LevelConfig _levelConfig;
         private static UomaWeb.Models.GameConfig _gameConfig;
         private static UomaData _uomaState;
 
@@ -29,7 +28,6 @@ namespace UomaWeb
             UomaDataManager.InitializeUomaGameData();
             UomaDataManager.LoadGameConfig();
             UomaDataManager.LoadItemConfig();
-            UomaDataManager.LoadLevelConfig();
         }
 
         public static int GetVirtualCurrency()
@@ -57,11 +55,6 @@ namespace UomaWeb
             return _itemConfig;
         }
 
-        public static LevelConfig GetLevelConfig()
-        {
-            return _levelConfig;
-        }
-
         public static void LoadGameConfig()
         {
             try
@@ -83,18 +76,6 @@ namespace UomaWeb
             catch (Exception ex)
             {
                 Console.WriteLine($"加载物品配置失败: {ex.Message}");
-            }
-        }
-
-        public static void LoadLevelConfig()
-        {
-            try
-            {
-                _levelConfig = UomaLevelConfig.GetConfig();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"加载关卡配置失败: {ex.Message}");
             }
         }
 
@@ -122,7 +103,8 @@ namespace UomaWeb
                 {
                     _uomaState.Games[gameName] = new GameData
                     {
-                        Items = new Dictionary<string, GameItemData>()
+                        Items = new Dictionary<string, GameItemData>(),
+                        Levels = new List<GameLevelData>()
                     };
                 }
 
@@ -162,57 +144,31 @@ namespace UomaWeb
                     }
                 }
 
-                if(gameInfo.GameLevel!= null)
+                // 更新关卡数据
+                if(gameInfo.GameLevel != null)
                 {
                     foreach (var level in gameInfo.GameLevel)
                     {
                         if (level?.GameLevelId == null) continue;
 
-                        // 从配置中查找LevelID对应的num
-                        int levelNum = -1;
-                        string levelId = null;
-                        if (_levelConfig?.Levels != null && _levelConfig.Levels.ContainsKey(gameName))
-                        {   
-                            for (int i = 0; i < _levelConfig.Levels[gameName].Count; i++)
-                            {
-                                if (_levelConfig.Levels[gameName][i].id == level.GameLevelId)
-                                {
-                                    levelNum = i;
-                                    levelId = _levelConfig.Levels[gameName][i].id;
-                                    break;
-                                }
-                            }
-                        }
-
-                        // 确保Levels列表已初始化
-                        if (_uomaState.Games[gameName].Levels == null)
+                        // 直接使用GameLevelId和GameLevelName
+                        var levelData = new GameLevelData
                         {
-                            _uomaState.Games[gameName].Levels = new List<GameLevelData>();
-                        }
+                            Id = level.GameLevelId,
+                            Name = level.GameLevelName,
+                            IsComplete = level.IsComplete,
+                            GameLevelStar = level.GameLevelStar
+                        };
 
-                        // 如果找到对应的关卡，更新数据；否则添加新关卡
-                        if (levelId != null)
+                        // 查找是否已存在该关卡
+                        var existingLevelIndex = _uomaState.Games[gameName].Levels.FindIndex(l => l.Id == level.GameLevelId);
+                        if (existingLevelIndex >= 0)
                         {
-                            if (levelNum < _uomaState.Games[gameName].Levels.Count)
-                            {
-                                _uomaState.Games[gameName].Levels[levelNum] = new GameLevelData
-                                {
-                                    Id = levelId,
-                                    Name = _levelConfig.Levels[gameName][levelNum].name,
-                                    IsComplete = level.IsComplete,
-                                    GameLevelStar = level.GameLevelStar
-                                };
-                            }
-                            else
-                            {
-                                _uomaState.Games[gameName].Levels.Add(new GameLevelData
-                                {
-                                    Id = levelId,
-                                    Name = _levelConfig.Levels[gameName][levelNum].name,
-                                    IsComplete = level.IsComplete,
-                                    GameLevelStar = level.GameLevelStar
-                                });
-                            }
+                            _uomaState.Games[gameName].Levels[existingLevelIndex] = levelData;
+                        }
+                        else
+                        {
+                            _uomaState.Games[gameName].Levels.Add(levelData);
                         }
                     }
                 }
@@ -232,6 +188,5 @@ namespace UomaWeb
                 VirtualCurrency = userInfo.VirtualCurrency
             };
         }
-        
     }
 }
