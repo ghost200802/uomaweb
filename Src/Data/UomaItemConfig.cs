@@ -34,6 +34,12 @@ namespace UomaWeb
                             { "skip", new ItemAction{ id = "1904084069114224640", name = "下一关"} },
                             { "undo", new ItemAction{ id = "1904084069156167680", name = "上一步"} }
                         }
+                    },
+                    { "KnifeHit", new Dictionary<string, ItemAction>
+                        {
+                            { "skip", new ItemAction{ id = "1904086017620090880", name = "下一关"} },
+                            { "undo", new ItemAction{ id = "1904086017741725696", name = "上一步"} }
+                        }
                     }
                 }
             };

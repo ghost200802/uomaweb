@@ -5,9 +5,9 @@ namespace UomaWeb
 {
     public static class UomaGameConfig
     {
-        public static GameConfig GetConfig()
+        public static UomaWeb.Models.GameConfig GetConfig()
         {
-            return new GameConfig
+            return new UomaWeb.Models.GameConfig
             {
                 Games = new Dictionary<string, GameAction>
                 {

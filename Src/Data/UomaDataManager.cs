@@ -12,7 +12,7 @@ namespace UomaWeb
     {
         private static ItemConfig _itemConfig;
         private static LevelConfig _levelConfig;
-        private static GameConfig _gameConfig;
+        private static UomaWeb.Models.GameConfig _gameConfig;
         private static UomaData _uomaState;
 
         private static void InitializeUomaGameData()
@@ -47,7 +47,7 @@ namespace UomaWeb
             return _uomaState;
         }
 
-        public static GameConfig GetGameConfig()
+        public static UomaWeb.Models.GameConfig GetGameConfig()
         {
             return _gameConfig;
         }
