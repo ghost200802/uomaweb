@@ -14,7 +14,7 @@ public partial class GameWebApi
 {
     public IEnumerator GetGameInfo(Action<ApiResponse<GameInfo>> callback)
     {
-        string requestUrl = $"{UomaUtils.BaseUrl}/v1/games/{UomaController.Instance.GameId}";        
+        string requestUrl = $"{UomaUtils.BaseUrl}/v1/games/{UomaController.Instance.GameId}/info";
         string requestKey = GetRequestKey(nameof(GetGameInfo));
         UnityWebRequest request = null;
         try
@@ -67,14 +67,28 @@ public partial class GameWebApi
                 };
                 var result = JsonConvert.DeserializeObject<ApiResponse<GameInfo>>(responseContent, settings);
 
-                if (result?.Data != null)
+                switch (result.Code)
                 {
-                    UomaDataManager.UpdateGameData(result.Data);
-                    Debug.Log("游戏信息已更新");
-                }
-                else
-                {
-                    Debug.LogWarning("响应成功但未包含游戏数据");
+                    case 401:
+                    {
+                        Debug.Log("用户登录已过期，请重新登录");
+                        UomaUtils.GameLogout();
+                        break;
+                    }
+                    default:
+                    {
+                        if (result?.Data != null)
+                        {
+                            UomaDataManager.UpdateGameData(result.Data);
+                            Debug.Log("游戏信息已更新");
+                        }
+                        else
+                        {
+                            Debug.LogWarning("响应成功但未包含游戏数据");
+                        }
+
+                        break;
+                    }
                 }
 
                 callback?.Invoke(result);

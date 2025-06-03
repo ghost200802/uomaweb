@@ -63,28 +63,43 @@ public partial class GameWebApi
     
                 var responseContent = request.downloadHandler.text;
                 Debug.Log($"响应内容: {responseContent}");
-    
+                
                 var settings = new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore
                 };
                 var result = JsonConvert.DeserializeObject<ApiResponse<UserInfo>>(responseContent, settings);
-    
-                if (result?.Data != null)
+
+
+                switch (result.Code)
                 {
-                    UomaDataManager.UpdateUserData(result.Data);
-                    Debug.Log("用户信息已更新");
-                    // Debug.Log("收到用户信息");
-                    // Debug.Log("解析后的用户信息:");
-                    // Debug.Log($"邀请码: {result.Data.InviteCode}");
-                    // Debug.Log($"CNY余额: {result.Data.AvailableBalanceCny}");
-                    // Debug.Log($"USD余额: {result.Data.AvailableBalanceUsd}");
-                    Debug.Log($"虚拟币: {result.Data.VirtualCurrency}");
-                    // Debug.Log($"创建时间: {result.Data.CreateTime}");
-                }
-                else
-                {
-                    Debug.LogWarning("响应成功但未包含用户数据");
+                    case 401:
+                    {
+                        Debug.Log("用户登录已过期，请重新登录");
+                        UomaUtils.GameLogout();
+                        break;
+                    }
+                    default:
+                    {
+                        if (result?.Data != null)
+                        {
+                            UomaDataManager.UpdateUserData(result.Data);
+                            Debug.Log("用户信息已更新");
+                            // Debug.Log("收到用户信息");
+                            // Debug.Log("解析后的用户信息:");
+                            // Debug.Log($"邀请码: {result.Data.InviteCode}");
+                            // Debug.Log($"CNY余额: {result.Data.AvailableBalanceCny}");
+                            // Debug.Log($"USD余额: {result.Data.AvailableBalanceUsd}");
+                            Debug.Log($"虚拟币: {result.Data.VirtualCurrency}");
+                            // Debug.Log($"创建时间: {result.Data.CreateTime}");
+                        }
+                        else
+                        {
+                            Debug.LogWarning("响应成功但未包含用户数据");
+                        }
+
+                        break;
+                    }
                 }
     
                 callback?.Invoke(result);

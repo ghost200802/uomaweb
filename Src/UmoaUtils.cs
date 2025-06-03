@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public static class UomaUtils
 {
@@ -18,4 +19,16 @@ public static class UomaUtils
     public static string AcceptLanguage => _acceptLanguage;
     public static string Platform => _platform;
     public static string UserAgent => _userAgent;
+
+    public static void GameLogout()
+    {
+        #if UNITY_WEBGL && !UNITY_EDITOR
+            UomaGameLogout();
+        #else
+            UnityEngine.Debug.Log("GameLogout called, but not in WebGL build");
+        #endif
+    }
+
+    [System.Runtime.InteropServices.DllImport("__Internal")]
+    private static extern void UomaGameLogout();
 }
