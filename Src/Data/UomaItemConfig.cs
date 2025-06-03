@@ -22,11 +22,23 @@ namespace UomaWeb
                             { "Marmalade", new ItemAction{ id = "1905122218045120512", name = "Marmalade"} }
                         }
                     },
-                    { "Snail", new Dictionary<string, ItemAction>
+                    { "ScrewRemoval", new Dictionary<string, ItemAction>
                         {
-                            { "unlock", new ItemAction{ id = "1900022219774926848", name = "解锁钉子孔"} },
-                            { "skip", new ItemAction{ id = "1900022221792387072", name = "跳关"} },
-                            { "guide", new ItemAction{ id = "1900022225047166976", name = "攻略"} }
+                            { "unlock", new ItemAction{ id = "1904079871152791552", name = "解锁钉子孔"} },
+                            { "skip", new ItemAction{ id = "1904079871119237120", name = "跳关"} },
+                            { "guide", new ItemAction{ id = "1904383674548789248", name = "攻略"} }
+                        }
+                    },
+                    { "WaterSort", new Dictionary<string, ItemAction>
+                        {
+                            { "skip", new ItemAction{ id = "1904084069114224640", name = "下一关"} },
+                            { "undo", new ItemAction{ id = "1904084069156167680", name = "上一步"} }
+                        }
+                    },
+                    { "KnifeHit", new Dictionary<string, ItemAction>
+                        {
+                            { "skip", new ItemAction{ id = "1904086017620090880", name = "下一关"} },
+                            { "undo", new ItemAction{ id = "1904086017741725696", name = "上一步"} }
                         }
                     }
                 }

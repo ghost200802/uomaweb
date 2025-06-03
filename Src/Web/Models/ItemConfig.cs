@@ -25,5 +25,9 @@ namespace UomaWeb.Models
         public string id { get; set; }
         [JsonProperty("gameLevelName")]
         public string name { get; set; }
+        [JsonProperty("isComplete")]
+        public int isComplete { get; set; }
+        [JsonProperty("gameLevelStar")]
+        public string gameLevelStar { get; set; }
     }
 }
