@@ -15,6 +15,10 @@ public partial class GameWebApi
     public IEnumerator GetGameInfo(Action<ApiResponse<GameInfo>> callback)
     {
         string requestUrl = $"{UomaUtils.BaseUrl}/v1/games/{UomaController.Instance.GameId}/info";
+        DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        DateTime currentUtcTime = DateTime.UtcNow;
+        long timestamp = (long)(currentUtcTime - epochStart).TotalSeconds;
+        requestUrl = $"{requestUrl}?timestamp={timestamp}";
         string requestKey = GetRequestKey(nameof(GetGameInfo));
         UnityWebRequest request = null;
         try

@@ -16,6 +16,10 @@ public partial class GameWebApi
     public IEnumerator GetUserInfo(Action<ApiResponse<UserInfo>> callback)
     {
         string requestUrl = $"{UomaUtils.BaseUrl}/v1/users";
+        DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        DateTime currentUtcTime = DateTime.UtcNow;
+        long timestamp = (long)(currentUtcTime - epochStart).TotalSeconds;
+        requestUrl = $"{requestUrl}?timestamp={timestamp}";
         string requestKey = GetRequestKey(nameof(GetUserInfo));
 
         // if (IsRequestInProgress(requestKey))
@@ -30,7 +34,7 @@ public partial class GameWebApi
         try
         {
             // 输出请求URL
-            Debug.Log($"请求URL: {UomaUtils.BaseUrl}/v1/users");
+            Debug.Log($"请求URL: {requestUrl}");
 
             SetCommonHeaders(request);
             request.downloadHandler = new DownloadHandlerBuffer();
