@@ -16,9 +16,7 @@ public partial class GameWebApi
     public IEnumerator GetUserInfo(Action<ApiResponse<UserInfo>> callback)
     {
         string requestUrl = $"{UomaUtils.BaseUrl}/v1/users";
-        DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        DateTime currentUtcTime = DateTime.UtcNow;
-        long timestamp = (long)(currentUtcTime - epochStart).TotalSeconds;
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
         requestUrl = $"{requestUrl}?timestamp={timestamp}";
         string requestKey = GetRequestKey(nameof(GetUserInfo));
 
@@ -34,9 +32,17 @@ public partial class GameWebApi
         try
         {
             // 输出请求URL
-            Debug.Log($"请求URL: {requestUrl}");
+            Debug.Log($"请求URL_UserInfo: {requestUrl}");
+            
 
             SetCommonHeaders(request);
+            string[] headerKeys = {"timestamp","token","nonce","sign","accept-language","platform","User-Agent","Content-Type"};
+            
+            foreach (var key in headerKeys)
+            {
+                Debug.Log($"请求Header: {key}-{request.GetRequestHeader(key)}");
+            }
+            
             request.downloadHandler = new DownloadHandlerBuffer();
 
             yield return request.SendWebRequest();
@@ -63,6 +69,10 @@ public partial class GameWebApi
                         Message = errorMessage
                     });
                     yield break;
+                }
+                else
+                {
+                    Debug.Log("响应成功~");
                 }
     
                 var responseContent = request.downloadHandler.text;
