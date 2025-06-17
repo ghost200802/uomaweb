@@ -24,6 +24,7 @@ namespace UomaWeb
 
         private void Awake()
         {
+            Debug.unityLogger.filterLogType = LogType.Warning;
             DontDestroyOnLoad(this.gameObject);
             if (gameObject != null) _gameHelper = gameObject.AddComponent<GameHelper>();
 
