@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Debug = UnityEngine.Debug;
 
 namespace UomaWeb
 {
@@ -24,7 +26,6 @@ namespace UomaWeb
 
         private void Awake()
         {
-            Debug.unityLogger.filterLogType = LogType.Warning;
             DontDestroyOnLoad(this.gameObject);
             if (gameObject != null) _gameHelper = gameObject.AddComponent<GameHelper>();
 
@@ -33,6 +34,43 @@ namespace UomaWeb
             Debug.Log($"WebUrl: {url}");
             if (!string.IsNullOrEmpty(url))
             {
+                // 直接检查URL是否以localhost开头（没有协议前缀的情况）
+                if (url.StartsWith("localhost") || url.StartsWith("localhost:"))
+                {
+                    UomaUtils.IsTestPlatform = true;
+                    Debug.Log("检测到本地开发环境URL（无协议前缀），已设置IsTestPlatform为true");
+                }
+                else
+                {
+                    // 检查URL中//后的第一个部分是否为test或者是否为localhost
+                    int protocolIndex = url.IndexOf("//");
+                    if (protocolIndex != -1)
+                    {
+                        string afterProtocol = url.Substring(protocolIndex + 2);
+                        int firstSlashIndex = afterProtocol.IndexOf('/');
+                        string domain = firstSlashIndex != -1 ? afterProtocol.Substring(0, firstSlashIndex) : afterProtocol;
+                        
+                        // 检查是否为localhost
+                        if (domain == "localhost" || domain.StartsWith("localhost:"))
+                        {
+                            UomaUtils.IsTestPlatform = true;
+                            Debug.Log("检测到本地开发环境URL，已设置IsTestPlatform为true");
+                        }
+                        else
+                        {
+                            // 检查是否为test开头的域名
+                            string[] parts = domain.Split('.');
+                            if (parts.Length > 0 && parts[0] == "test")
+                            {
+                                UomaUtils.IsTestPlatform = true;
+                                Debug.Log("检测到测试环境URL，已设置IsTestPlatform为true");
+                            }
+                        }
+                    }
+                }
+
+                Debug.unityLogger.filterLogType = UomaUtils.IsTestPlatform ? LogType.Log : LogType.Warning;
+                
                 int idIndex = url.IndexOf("id=", StringComparison.OrdinalIgnoreCase);
                 if (idIndex != -1)
                 {
