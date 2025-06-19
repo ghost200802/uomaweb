@@ -84,12 +84,12 @@ namespace UomaWeb
                     Debug.Log($"从URL获取到gameId: {gameId}");
                 }
             }
-
             Instance = this;
             Debug.Log($"UomaController Awake Done - {gameId}");
 #if UNITY_EDITOR
             ReceivePlayerToken(null);
 #endif
+            UomaDataManager.Init();
         }
 
         public void ReceivePlayerToken(string token) {
@@ -99,7 +99,6 @@ namespace UomaWeb
                 UomaUtils.Token = token;
             }
             Debug.Log($"Use Token: {UomaUtils.Token}");
-            UomaDataManager.Init();
             UomaDataManager.SetToken(UomaUtils.Token);
         }
 

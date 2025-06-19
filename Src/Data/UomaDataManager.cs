@@ -71,7 +71,7 @@ namespace UomaWeb
         {
             try
             {
-                _itemConfig = UomaItemConfig.GetConfig();
+                _itemConfig = UomaUtils.IsTestPlatform ? UomaItemConfig.GetTestConfig() : UomaItemConfig.GetConfig();
             }
             catch (Exception ex)
             {
