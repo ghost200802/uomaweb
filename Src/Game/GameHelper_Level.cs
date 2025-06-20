@@ -83,7 +83,7 @@ namespace UomaWeb
             if (gameData?.Levels != null && gameData.Levels.Count >= gameLevel)
             {   
                 levelId = gameData.Levels[gameLevel-1].Id;
-                Console.WriteLine($"Level ID: {levelId}");
+                Debug.Log($"Level ID: {levelId}");
             }
 
             if (levelId == null)
