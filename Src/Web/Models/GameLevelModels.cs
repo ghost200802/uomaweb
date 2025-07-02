@@ -12,6 +12,9 @@ namespace UomaWeb.Models
 
         [JsonProperty("gameLevelStar")]
         public string GameLevelStar { get; set; }
+        
+        [JsonProperty("gamePlatformHash")]
+        public string GamePlatformHash { get; set; }
     }
 
     public class LevelCompleteReply

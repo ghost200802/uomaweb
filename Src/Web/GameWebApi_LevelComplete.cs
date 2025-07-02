@@ -13,7 +13,7 @@ using System.Collections;
 
 public partial class GameWebApi
 {
-    public IEnumerator LevelComplete(string gameId, string gameLevelId, int gameLevelStar, Action<ApiResponse<LevelCompleteReply>> callback)
+    public IEnumerator LevelComplete(string gameId, string gameInstanceId, string gameLevelId, int gameLevelStar, Action<ApiResponse<LevelCompleteReply>> callback)
     {
         string requestUrl = $"{UomaUtils.BaseUrl}/v1/userGameLevels";
         string requestKey = GetRequestKey(nameof(LevelComplete));
@@ -38,7 +38,8 @@ public partial class GameWebApi
             {
                 GameId = gameId,
                 GameLevelId = gameLevelId,
-                GameLevelStar = gameLevelStar.ToString()
+                GameLevelStar = gameLevelStar.ToString(),
+                GamePlatformHash = gameInstanceId
             };
 
             var jsonBody = JsonConvert.SerializeObject(requestBody);

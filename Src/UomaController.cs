@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
@@ -96,6 +98,10 @@ namespace UomaWeb
             }
             Instance = this;
             Debug.Log($"UomaController Awake Done - {gameId}");
+
+            //generate InstanceId
+            instanceId = GenerateInstanceId(gameId, UomaUtils.Token);
+            Debug.Log($"UomaController InstanceId - {this.InstanceId}");
 #if UNITY_EDITOR
             ReceivePlayerToken(UomaUtils.Token);
 #endif
@@ -146,6 +152,40 @@ namespace UomaWeb
         public IEnumerator GetGameItemNum(System.Action<Dictionary<string, int>> callback)
         {
             yield return _gameHelper.GetGameItemNum(callback);
+        }
+        
+        /// <summary>
+        /// 根据gameId和playerToken生成一个32位的唯一标识符
+        /// </summary>
+        /// <param name="gameId">游戏ID</param>
+        /// <param name="playerToken">玩家令牌</param>
+        /// <returns>32位的哈希字符串</returns>
+        private string GenerateInstanceId(string gameId, string playerToken)
+        {
+            // 确保playerToken不为空
+            string token = string.IsNullOrEmpty(playerToken) ? "default" : playerToken;
+            
+            // 生成随机数
+            System.Random random = new System.Random();
+            string randomValue = random.Next(100000, 999999).ToString();
+            
+            // 组合源字符串
+            string hashSource = $"{token}_{gameId}_{randomValue}";
+            
+            // 使用MD5生成32位哈希值
+            using (var md5 = MD5.Create())
+            {
+                byte[] inputBytes = Encoding.UTF8.GetBytes(hashSource);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+                
+                // 将字节数组转换为32位十六进制字符串
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("x2"));
+                }
+                return sb.ToString();
+            }
         }
     }
 }

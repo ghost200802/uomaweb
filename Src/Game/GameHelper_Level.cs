@@ -66,6 +66,7 @@ namespace UomaWeb
         {
             var gameName = UomaController.Instance.GameName;
             var gameId = UomaController.Instance.GameId;
+            var gameInstanceId = UomaController.Instance.InstanceId;
             
             Debug.Log($"LevelComplete: {gameLevel} | Star: {star}");
             
@@ -93,7 +94,7 @@ namespace UomaWeb
             }
 
             // 提交通关信息
-            yield return _gameWebApi.LevelComplete(gameId, levelId, star, (response) =>
+            yield return _gameWebApi.LevelComplete(gameId, gameInstanceId, levelId, star, (response) =>
             {
                 if (response?.Code != 200)
                 {
