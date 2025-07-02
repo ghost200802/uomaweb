@@ -71,6 +71,12 @@ public partial class GameWebApi
                 };
                 var result = JsonConvert.DeserializeObject<ApiResponse<GameInfo>>(responseContent, settings);
 
+                if (result.Data.Status != 2)
+                {
+                    Debug.Log("游戏未上架！");
+                    UomaUtils.GameLogout();
+                }
+                
                 switch (result.Code)
                 {
                     case 401:

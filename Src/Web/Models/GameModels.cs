@@ -15,6 +15,7 @@ namespace UomaWeb.Models
         public string GameName { get; set; }
         public List<string> GameImg { get; set; }
         public string GameDetail { get; set; }
+        public int Status { get; set; }
         public List<GameLevelInfo> GameLevel { get; set; }
         public List<GameItemInfo> GameItem { get; set; }
     }
