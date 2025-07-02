@@ -12,7 +12,7 @@ namespace UomaWeb
     {
         private static ItemConfig _itemConfig;
         private static UomaWeb.Models.GameConfig _gameConfig;
-        private static UomaData _uomaState;
+        private static UomaData _uomaState = new();
 
         private static void InitializeUomaGameData()
         {
@@ -25,7 +25,6 @@ namespace UomaWeb
 
         public static void Init()
         {
-            UomaDataManager.InitializeUomaGameData();
             UomaDataManager.LoadGameConfig();
             UomaDataManager.LoadItemConfig();
         }

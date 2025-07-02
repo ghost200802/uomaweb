@@ -53,6 +53,9 @@ public partial class GameWebApi
         request.SetRequestHeader("sign", sign);
         request.SetRequestHeader("accept-language", UomaUtils.AcceptLanguage);
         request.SetRequestHeader("platform", UomaUtils.Platform);
+#if UNITY_EDITOR
+        request.SetRequestHeader("user-agent", UomaUtils.TestUserAgent);
+#endif
         request.SetRequestHeader("Content-Type", "application/json");
     }
 

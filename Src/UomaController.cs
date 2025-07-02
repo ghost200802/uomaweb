@@ -20,9 +20,14 @@ namespace UomaWeb
         [SerializeField]
         private string gameId = "";
         
+        [SerializeField]
+        private string instanceId = "";
+        
         public string GameName => gameName;
         
         public string GameId => gameId;
+        
+        public string InstanceId => instanceId;
 
         private void Awake()
         {
@@ -32,7 +37,12 @@ namespace UomaWeb
             // 从URL中获取gameId参数
             string url = Application.absoluteURL;
             Debug.Log($"WebUrl: {url}");
-            if (!string.IsNullOrEmpty(url))
+            if (string.IsNullOrEmpty(url))
+            {
+                UomaUtils.IsTestPlatform = true;
+                Debug.Log("检测到本地开发环境URL（无协议前缀），已设置IsTestPlatform为true");
+            }
+            else
             {
                 // 直接检查URL是否以localhost开头（没有协议前缀的情况）
                 if (url.StartsWith("localhost") || url.StartsWith("localhost:"))
@@ -87,7 +97,7 @@ namespace UomaWeb
             Instance = this;
             Debug.Log($"UomaController Awake Done - {gameId}");
 #if UNITY_EDITOR
-            ReceivePlayerToken(null);
+            ReceivePlayerToken(UomaUtils.Token);
 #endif
             UomaDataManager.Init();
         }

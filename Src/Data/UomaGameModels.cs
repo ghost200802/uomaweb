@@ -5,8 +5,8 @@ namespace UomaWeb.Models
     public class UomaData
     {
         public string Token { get; set; }
-        public PlayerData PlayerData { get; set; }
-        public Dictionary<string, GameData> Games { get; set; }
+        public PlayerData PlayerData { get; set; } = null;
+        public Dictionary<string, GameData> Games { get; set; } = new();
     }
 
     public class PlayerData
