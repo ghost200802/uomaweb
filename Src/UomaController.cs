@@ -22,7 +22,6 @@ namespace UomaWeb
         [SerializeField]
         private string gameId = "";
         
-        [SerializeField]
         private string instanceId = "";
         
         public string GameName => gameName;

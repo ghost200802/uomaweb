@@ -38,6 +38,13 @@ namespace UomaWeb
                             name = "飞刀",
                             description = "考验技巧的益智游戏"
                         }
+                    },
+                    { "Tile", new GameAction
+                        {
+                            id = "1944714241605410816",
+                            name = "方块消除",
+                            description = "方块消除的游戏"
+                        }
                     }
                 }
             };
