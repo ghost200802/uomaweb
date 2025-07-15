@@ -44,6 +44,15 @@ namespace UomaWeb
                             { "skip", new ItemAction { id = "1904086017620090880", name = "下一关" } },
                             { "undo", new ItemAction { id = "1904086017741725696", name = "上一步" } }
                         }
+                    },
+                    {
+                        "TilePuzzle", new Dictionary<string, ItemAction>
+                        {
+                            { "suggest", new ItemAction { id = "1944714244633698304", name = "suggest" } },
+                            { "shuffle", new ItemAction { id = "1945103234985664512", name = "shuffle" } },
+                            { "undo", new ItemAction { id = "1945103235166019584", name = "undo" } },
+                            { "continue", new ItemAction { id = "1945120255718760448", name = "continue" } }
+                        }
                     }
                 }
             };

@@ -122,8 +122,7 @@ namespace UomaWeb
             yield return _gameHelper.GetPlayerCompleteLevel((result)=>
             {
                 Debug.Log($"CompleteLevel:{result}");
-                PlayerPrefs.SetInt($"{UomaUtils.Token}.{UomaController.Instance.GameName}.CompleteLevel", result);
-                PlayerPrefs.Save();
+                UomaDataManager.CompleteLevel = result;
                 callback?.Invoke(result);
             });
         }

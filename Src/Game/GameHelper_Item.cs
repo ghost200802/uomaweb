@@ -165,6 +165,7 @@ namespace UomaWeb
             }
 
             Debug.Log($"Item {gameName}-{itemKey}-{itemNum}");
+            
             callback?.Invoke((0, virtualCurrency, itemNum));
         }
 

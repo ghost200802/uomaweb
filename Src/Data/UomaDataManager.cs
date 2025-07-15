@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
+using Doozy.Engine.Utils.ColorModels;
 using Newtonsoft.Json;
 using UomaWeb.Models;
 using Unity;
@@ -13,6 +15,11 @@ namespace UomaWeb
         private static ItemConfig _itemConfig;
         private static UomaWeb.Models.GameConfig _gameConfig;
         private static UomaData _uomaState = new();
+        public static int CompleteLevel { get; set; }
+        
+        private static readonly Dictionary<string, int> _itemNums = new();
+
+        public static int CurrLevel => CompleteLevel + 1;
 
         private static void InitializeUomaGameData()
         {
@@ -33,7 +40,6 @@ namespace UomaWeb
         {
             return int.Parse(_uomaState?.PlayerData?.VirtualCurrency ?? "0");
         }
-
         public static bool CheckGameData()
         {
             return _uomaState?.Games.ContainsKey(UomaController.Instance.GameName) == true;
@@ -88,6 +94,19 @@ namespace UomaWeb
             _uomaState.Token = token;
         }
 
+        public static void UpdateItemNum(string itemKey, int num)
+        {
+            if(!_itemNums.TryAdd(itemKey.ToLower(), num))
+            {
+                _itemNums[itemKey] = num;
+            }
+        }
+
+        public static int GetItemNum(string itemKey)
+        {
+            return _itemNums.GetValueOrDefault(itemKey.ToLower());
+        }
+
         public static void UpdateGameData(GameInfo gameInfo)
         {
             if (gameInfo == null) return;
@@ -139,6 +158,8 @@ namespace UomaWeb
                             };
                             PlayerPrefs.SetInt($"{UomaController.Instance.GameName}-{itemKey.ToLower()}", int.Parse(item.GameItemItemNum));
                             PlayerPrefs.Save();
+                            
+                            UpdateItemNum(itemKey, int.Parse(item.GameItemItemNum));
                         }
                     }
                 }

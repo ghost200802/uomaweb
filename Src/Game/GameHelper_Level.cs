@@ -103,11 +103,9 @@ namespace UomaWeb
                 }
                 
                 Debug.Log($"CompleteLevel:{gameLevel}");
-                var completeLevel = PlayerPrefs.GetInt($"{UomaUtils.Token}.{UomaController.Instance.GameName}.CompleteLevel", 0);
-                if (gameLevel > completeLevel)
+                if (gameLevel > UomaDataManager.CompleteLevel)
                 {
-                    PlayerPrefs.SetInt($"{UomaUtils.Token}.{UomaController.Instance.GameName}.CompleteLevel", gameLevel);
-                    PlayerPrefs.Save();
+                    UomaDataManager.CompleteLevel = gameLevel;
                 }
 
                 StartCoroutine(UpdateLevelInfo(callback));

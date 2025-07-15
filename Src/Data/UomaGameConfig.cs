@@ -39,7 +39,7 @@ namespace UomaWeb
                             description = "考验技巧的益智游戏"
                         }
                     },
-                    { "Tile", new GameAction
+                    { "TilePuzzle", new GameAction
                         {
                             id = "1944714241605410816",
                             name = "方块消除",
