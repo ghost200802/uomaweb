@@ -46,7 +46,7 @@ namespace UomaWeb
                         }
                     },
                     {
-                        "TilePuzzle", new Dictionary<string, ItemAction>
+                        "TilesMatching", new Dictionary<string, ItemAction>
                         {
                             { "suggest", new ItemAction { id = "1944714244633698304", name = "suggest" } },
                             { "shuffle", new ItemAction { id = "1945103234985664512", name = "shuffle" } },
