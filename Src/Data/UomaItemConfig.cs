@@ -92,6 +92,15 @@ namespace UomaWeb
                             { "skip", new ItemAction{ id = "1935600433095811072", name = "下一关"} },
                             { "undo", new ItemAction{ id = "1935600433125171200", name = "上一步"} }
                         }
+                    },
+                    {
+                        "TilesMatching", new Dictionary<string, ItemAction>
+                        {
+                            { "suggest", new ItemAction { id = "1945411229938130944", name = "suggest" } },
+                            { "shuffle", new ItemAction { id = "1945411230001045504", name = "shuffle" } },
+                            { "undo", new ItemAction { id = "1945411230038794240", name = "undo" } },
+                            { "continue", new ItemAction { id = "1945411230072348672", name = "continue" } }
+                        }
                     }
                 }
             };
