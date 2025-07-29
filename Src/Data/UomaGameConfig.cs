@@ -58,6 +58,14 @@ namespace UomaWeb
                             name = "救救鸭子",
                             description = "益智解谜游戏"
                         }
+                    },
+                    {
+                        "Tetris", new GameAction
+                        {
+                            id = "1950170762824949760",
+                            name = "俄罗斯方块",
+                            description = "俄罗斯方块"
+                        }
                     }
                 }
             };
