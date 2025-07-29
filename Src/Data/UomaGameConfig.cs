@@ -66,6 +66,14 @@ namespace UomaWeb
                             name = "俄罗斯方块",
                             description = "俄罗斯方块"
                         }
+                    },
+                    {
+                        "Merge2048", new GameAction
+                        {
+                            id = "1950188176455278592",
+                            name = "俄罗斯方块",
+                            description = "俄罗斯方块"
+                        }
                     }
                 }
             };
