@@ -5,9 +5,9 @@ namespace UomaWeb.Models
 {
     public class ItemConfig
     {
-        public Dictionary<string, Dictionary<string,ItemAction>> Items { get; set; }
-        //TODO:
-        //public Dictionary<string, List<string>> Items { get; set; }
+        public Dictionary<string, List<string>> ItemNames { get; set; }
+
+        public Dictionary<string, Dictionary<string,ItemAction>> Items { get; set; }        
     }
 
     public class ItemAction

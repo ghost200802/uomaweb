@@ -75,7 +75,7 @@ namespace UomaWeb
         {
             try
             {
-                _itemConfig = UomaUtils.IsTestPlatform ? UomaItemConfig.GetTestConfig() : UomaItemConfig.GetConfig();
+                _itemConfig = UomaItemConfig.GetConfig();
             }
             catch (Exception ex)
             {
@@ -134,13 +134,13 @@ namespace UomaWeb
 
                         // 从配置中查找道具ID对应的key
                         string itemKey = null;
-                        if (_itemConfig?.Items != null && _itemConfig.Items.ContainsKey(gameName))
+                        if (_itemConfig?.ItemNames != null && _itemConfig.ItemNames.ContainsKey(gameName))
                         {
-                            foreach (var configItem in _itemConfig.Items[gameName])
+                            foreach (var name in _itemConfig.ItemNames[gameName])
                             {
-                                if (configItem.Value.id == item.GameItemId)
+                                if (string.Equals(name, item.GameItemName, StringComparison.OrdinalIgnoreCase))
                                 {
-                                    itemKey = configItem.Key.ToLower();
+                                    itemKey = name.ToLower();
                                     break;
                                 }
                             }
