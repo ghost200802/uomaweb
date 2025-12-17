@@ -133,32 +133,34 @@ namespace UomaWeb
                         if (item?.GameItemId == null) continue;
 
                         // 从配置中查找道具ID对应的key
-                        string itemKey = null;
+                        string itemName = null;
                         if (_itemConfig?.ItemNames != null && _itemConfig.ItemNames.ContainsKey(gameName))
                         {
                             foreach (var name in _itemConfig.ItemNames[gameName])
                             {
                                 if (string.Equals(name, item.GameItemName, StringComparison.OrdinalIgnoreCase))
                                 {
-                                    itemKey = name.ToLower();
+                                    itemName = name.ToLower();
                                     break;
                                 }
                             }
                         }
 
                         // 如果找到对应的道具key，使用它来更新数据
-                        if (itemKey != null)
+                        if (itemName != null)
                         {
-                            _uomaState.Games[gameName].Items[itemKey] = new GameItemData
+                            _uomaState.Games[gameName].Items[itemName] = new GameItemData
                             {
+                                Id = item.GameItemId,
+                                Name = itemName,
                                 IsFree = item.IsFree,
                                 VirtualCurrencyPrice = int.Parse(item.VirtualCurrencyPrice),
                                 GameItemItemNum = int.Parse(item.GameItemItemNum)
                             };
-                            PlayerPrefs.SetInt($"{UomaController.Instance.GameName}-{itemKey.ToLower()}", int.Parse(item.GameItemItemNum));
+                            PlayerPrefs.SetInt($"{UomaController.Instance.GameName}-{itemName.ToLower()}", int.Parse(item.GameItemItemNum));
                             PlayerPrefs.Save();
                             
-                            UpdateItemNum(itemKey, int.Parse(item.GameItemItemNum));
+                            UpdateItemNum(itemName, int.Parse(item.GameItemItemNum));
                         }
                     }
                 }

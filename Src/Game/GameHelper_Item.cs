@@ -45,14 +45,12 @@ namespace UomaWeb
                 yield break;
             }
 
-            foreach (var item in UomaDataManager.GetItemConfig().Items[gameName])
+            var itemData = UomaDataManager.GetState().Games[gameName].Items;
+            if (itemData.ContainsKey(itemName.ToLower()))
             {
-                if (item.Key.ToLower() == itemName.ToLower())
-                {
-                    itemId = item.Value.id;
-                    itemKey = item.Key.ToLower();
-                    break;
-                }
+                var item = itemData[itemName.ToLower()];
+                itemId = item.Id;
+                itemKey = itemName.ToLower();
             }
 
             if (itemId == null)
@@ -91,14 +89,12 @@ namespace UomaWeb
                 yield break;
             }
 
-            foreach (var item in UomaDataManager.GetItemConfig().Items[gameName])
+            var itemData = UomaDataManager.GetState().Games[gameName].Items;
+            if (itemData.ContainsKey(itemName.ToLower()))
             {
-                if (item.Key.ToLower() == itemName.ToLower())
-                {
-                    itemId = item.Value.id;
-                    itemKey = item.Key.ToLower();
-                    break;
-                }
+                var item = itemData[itemName.ToLower()];
+                itemId = item.Id;
+                itemKey = itemName.ToLower();
             }
 
             if (itemId == null)
