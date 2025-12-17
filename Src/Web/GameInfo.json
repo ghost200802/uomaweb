@@ -1,0 +1,56 @@
+{
+  "code" : 200,
+  "data" : {
+    "gameId" : "1998685531936432128",
+    "gameName" : "Tiles Matching",
+    "gameImageUrls" : [ "https://7a0f9e73e32d7119-1381162701.cos.ap-singapore.myqcloud.com/40cad7891eb709fc/1bea4fd5bff866a6/19986680372788451840085.jpg" ],
+    "gameDetail" : "方块消除",
+    "gameUrl" : "https://test.uoma.com/tilesMatching/",
+    "status" : 5,
+    "isReleased" : 1,
+    "gameLevels" : [ {
+      "gameLevelId" : "1998689406630273024",
+      "gameLevelName" : "第1关",
+      "isComplete" : 0,
+      "gameLevelStar" : "0"
+    }, {
+      "gameLevelId" : "1998689406634467328",
+      "gameLevelName" : "第2关",
+      "isComplete" : 0,
+      "gameLevelStar" : "0"
+    } ],
+    "gameItems" : [ {
+      "gameItemId" : "1998689407175532544",
+      "gameItemName" : "suggest",
+      "gameItemImageUrls" : [ "https://7a0f9e73e32d7119-1381162701.cos.ap-singapore.myqcloud.com/40cad7891eb709fc/1bea4fd5bff866a6/19986680372788451840085.jpg" ],
+      "gameItemDetail" : "suggest",
+      "isFree" : 0,
+      "virtualCurrencyPrice" : "5",
+      "gameItemQuantity" : "0"
+    }, {
+      "gameItemId" : "1998689407179726848",
+      "gameItemName" : "shuffle",
+      "gameItemImageUrls" : [ "https://7a0f9e73e32d7119-1381162701.cos.ap-singapore.myqcloud.com/40cad7891eb709fc/1bea4fd5bff866a6/19986680372788451840085.jpg" ],
+      "gameItemDetail" : "shuffle",
+      "isFree" : 0,
+      "virtualCurrencyPrice" : "5",
+      "gameItemQuantity" : "0"
+    }, {
+      "gameItemId" : "1998689407183921152",
+      "gameItemName" : "undo",
+      "gameItemImageUrls" : [ "https://7a0f9e73e32d7119-1381162701.cos.ap-singapore.myqcloud.com/40cad7891eb709fc/1bea4fd5bff866a6/19986680372788451840085.jpg" ],
+      "gameItemDetail" : "undo",
+      "isFree" : 0,
+      "virtualCurrencyPrice" : "5",
+      "gameItemQuantity" : "0"
+    }, {
+      "gameItemId" : "1998689407183921153",
+      "gameItemName" : "continue",
+      "gameItemImageUrls" : [ "https://7a0f9e73e32d7119-1381162701.cos.ap-singapore.myqcloud.com/40cad7891eb709fc/1bea4fd5bff866a6/19986680372788451840085.jpg" ],
+      "gameItemDetail" : "continue",
+      "isFree" : 0,
+      "virtualCurrencyPrice" : "10",
+      "gameItemQuantity" : "0"
+    } ]
+  }
+}

@@ -71,9 +71,9 @@ public partial class GameWebApi
                 };
                 var result = JsonConvert.DeserializeObject<ApiResponse<GameInfo>>(responseContent, settings);
 
-                if (result.Data.Status != 2)
+                if (result.Data.Status != 5)
                 {
-                    Debug.Log("游戏未上架！");
+                    Debug.Log($"游戏状态异常！ Status:[{result.Data.Status}]");
                     UomaUtils.GameLogout();
                 }
                 
