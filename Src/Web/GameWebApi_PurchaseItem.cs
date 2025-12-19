@@ -42,15 +42,11 @@ public partial class GameWebApi
             {
                 OrderType = 12,
                 OrderAmountCurrency = "VirtualCurrency",
-                IsUseBalance = 1,
                 OrderItem = new OrderItem
                 {
-                    GameItemOrderItem = new GameItemOrderItem
-                    {
-                        GameId = gameId,
-                        GameItemId = gameItemId,
-                        GameItemQuantity = gameItemItemNum
-                    }
+                    GameId = gameId,
+                    GameItemId = gameItemId,
+                    GameItemQuantity = gameItemItemNum
                 }
             };
 
@@ -86,7 +82,9 @@ public partial class GameWebApi
                 yield break;
             }
 
+            Debug.Log($"响应内容: {request.downloadHandler.text}");
             var step1Response = JsonConvert.DeserializeObject<GenerateOrderPaymentAmountReply>(request.downloadHandler.text);
+            
             if (step1Response.Code != 200 || step1Response.Data == null)
             {
                 HandlePurchaseError(request, callback, "Step 1 Logic");
@@ -130,12 +128,9 @@ public partial class GameWebApi
                 ClientPlatform = "webH5",
                 OrderItem = new OrderItem
                 {
-                    GameItemOrderItem = new GameItemOrderItem
-                    {
-                        GameId = gameId,
-                        GameItemId = gameItemId,
-                        GameItemQuantity = gameItemItemNum
-                    }
+                    GameId = gameId,
+                    GameItemId = gameItemId,
+                    GameItemQuantity = gameItemItemNum
                 }
             };
 

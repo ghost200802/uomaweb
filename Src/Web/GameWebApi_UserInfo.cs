@@ -15,7 +15,7 @@ public partial class GameWebApi
 {
     public IEnumerator GetUserInfo(Action<ApiResponse<UserInfo>> callback)
     {
-        string requestUrl = $"{UomaUtils.BaseUrl}/v1/users";
+        string requestUrl = $"{UomaUtils.BaseUrl}/v1/users/info";
         var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
         requestUrl = $"{requestUrl}?timestamp={timestamp}";
         string requestKey = GetRequestKey(nameof(GetUserInfo));

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace UomaWeb.Models
 {
-    public class GameItemOrderItem
+    public class OrderItem
     {
         [JsonProperty("gameId")]
         public string GameId { get; set; }
@@ -15,12 +15,6 @@ namespace UomaWeb.Models
         public string GameItemQuantity { get; set; }
     }
 
-    public class OrderItem
-    {
-        [JsonProperty("gameItemOrderItem")]
-        public GameItemOrderItem GameItemOrderItem { get; set; }
-    }
-
     public class GenerateOrderPaymentAmountRequest
     {
         [JsonProperty("orderType")]
@@ -29,11 +23,8 @@ namespace UomaWeb.Models
         [JsonProperty("orderAmountCurrency")]
         public string OrderAmountCurrency { get; set; }
 
-        [JsonProperty("orderItem")]
+        [JsonProperty("order_item")]
         public OrderItem OrderItem { get; set; }
-
-        [JsonProperty("isUseBalance")]
-        public int IsUseBalance { get; set; }
     }
 
     public class GenerateOrderPaymentAmountReply
