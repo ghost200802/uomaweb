@@ -47,6 +47,9 @@ public partial class GameWebApi
 
             yield return request.SendWebRequest();
 
+            ApiResponse<UserInfo> result = null;
+            bool processSuccess = false;
+
             try
             {
                 if (request.result != UnityWebRequest.Result.Success)
@@ -82,9 +85,15 @@ public partial class GameWebApi
                 {
                     NullValueHandling = NullValueHandling.Ignore
                 };
-                var result = JsonConvert.DeserializeObject<ApiResponse<UserInfo>>(responseContent, settings);
+                result = JsonConvert.DeserializeObject<ApiResponse<UserInfo>>(responseContent, settings);
+                processSuccess = true;
+            }
+            catch (Exception e) {
+                Debug.LogError("处理响应时出错: " + e);
+            }
 
-
+            if (processSuccess && result != null)
+            {
                 switch (result.Code)
                 {
                     case 401:
@@ -97,6 +106,43 @@ public partial class GameWebApi
                     {
                         if (result?.Data != null)
                         {
+                            // 获取虚拟币余额
+                            string balanceRequestUrl = $"{UomaUtils.BaseUrl}/v1/users/virtualCurrencyBalance";
+                            var balanceTimestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+                            balanceRequestUrl = $"{balanceRequestUrl}?timestamp={balanceTimestamp}";
+                            
+                            using (UnityWebRequest balanceRequest = new UnityWebRequest(balanceRequestUrl, "GET"))
+                            {
+                                SetCommonHeaders(balanceRequest);
+                                balanceRequest.downloadHandler = new DownloadHandlerBuffer();
+                                
+                                Debug.Log($"请求URL_Balance: {balanceRequestUrl}");
+                                yield return balanceRequest.SendWebRequest();
+                                
+                                if (balanceRequest.result == UnityWebRequest.Result.Success)
+                                {
+                                    var balanceContent = balanceRequest.downloadHandler.text;
+                                    Debug.Log($"余额响应: {balanceContent}");
+                                    try 
+                                    {
+                                        var balanceResult = JsonConvert.DeserializeObject<ApiResponse<VirtualCurrencyBalanceData>>(balanceContent);
+                                        if (balanceResult?.Data != null)
+                                        {
+                                            result.Data.VirtualCurrency = balanceResult.Data.VirtualCurrencyBalance;
+                                            Debug.Log($"更新虚拟币余额: {result.Data.VirtualCurrency}");
+                                        }
+                                    }
+                                    catch(Exception ex)
+                                    {
+                                         Debug.LogError($"解析余额失败: {ex}");
+                                    }
+                                }
+                                else
+                                {
+                                     Debug.LogError($"获取余额失败: {balanceRequest.error}");
+                                }
+                            }
+
                             UomaDataManager.UpdateUserData(result.Data);
                             Debug.Log("用户信息已更新");
                             // Debug.Log("收到用户信息");
@@ -117,9 +163,6 @@ public partial class GameWebApi
                 }
     
                 callback?.Invoke(result);
-            }
-            catch (Exception e) {
-                Debug.LogError("处理响应时出错: " + e);
             }
             
         }

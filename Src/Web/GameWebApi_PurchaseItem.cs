@@ -41,12 +41,15 @@ public partial class GameWebApi
             var step1Request = new GenerateOrderPaymentAmountRequest
             {
                 OrderType = 12,
-                OrderAmountCurrency = "VirtualCurrency",
+                OrderAmountCurrency = "virtualCurrency",
                 OrderItem = new OrderItem
                 {
-                    GameId = gameId,
-                    GameItemId = gameItemId,
-                    GameItemQuantity = gameItemItemNum
+                    GameItemOrderItem = new GameItemOrderItem
+                    {
+                        GameId = gameId,
+                        GameItemId = gameItemId,
+                        GameItemQuantity = gameItemItemNum
+                    }
                 }
             };
 
@@ -123,14 +126,17 @@ public partial class GameWebApi
             {
                 OrderType = 12,
                 PaymentAmount = paymentAmount,
-                OrderAmountCurrency = "VirtualCurrency",
-                PaymentChannel = 0,
+                OrderAmountCurrency = "virtualCurrency",
+                PaymentChannel = 8,
                 ClientPlatform = "webH5",
                 OrderItem = new OrderItem
                 {
-                    GameId = gameId,
-                    GameItemId = gameItemId,
-                    GameItemQuantity = gameItemItemNum
+                    GameItemOrderItem = new GameItemOrderItem
+                    {
+                        GameId = gameId,
+                        GameItemId = gameItemId,
+                        GameItemQuantity = gameItemItemNum
+                    }
                 }
             };
 
@@ -166,6 +172,7 @@ public partial class GameWebApi
                 yield break;
             }
 
+            Debug.Log($"响应内容: {request.downloadHandler.text}");
             var step2Response = JsonConvert.DeserializeObject<CreateOrderReply>(request.downloadHandler.text);
             if (step2Response.Code != 200 || step2Response.Data == null)
             {
@@ -240,6 +247,7 @@ public partial class GameWebApi
                 yield break;
             }
 
+            Debug.Log($"响应内容: {request.downloadHandler.text}");
             var step3Response = JsonConvert.DeserializeObject<PayOrderReply>(request.downloadHandler.text);
             if (step3Response.Code != 200)
             {

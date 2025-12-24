@@ -34,4 +34,10 @@ namespace UomaWeb.Models
         public string StoreUrl { get; set; }
         public string CreateTime { get; set; }
     }
+
+    public class VirtualCurrencyBalanceData
+    {
+        [Newtonsoft.Json.JsonProperty("virtualCurrencyBalance")]
+        public string VirtualCurrencyBalance { get; set; }
+    }
 }
