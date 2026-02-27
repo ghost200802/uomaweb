@@ -33,7 +33,7 @@ public partial class GameWebApi
         try
         {
             // Step 1: Generate Payment Amount
-            string step1Url = $"{UomaUtils.BaseUrl}/v1/orders/paymentAmount";
+            string step1Url = $"{UomaUtils.BaseUrl}/v1/orders/orderAmount";
             request = new UnityWebRequest(step1Url, "POST");
             SetCommonHeaders(request);
             request.SetRequestHeader("idempotentKey", idempotentKey);
@@ -204,7 +204,7 @@ public partial class GameWebApi
         try
         {
             string step3Url = $"{UomaUtils.BaseUrl}/v1/orders/{orderId}/payment";
-            request = new UnityWebRequest(step3Url, "PUT");
+            request = new UnityWebRequest(step3Url, "POST");
             SetCommonHeaders(request);
             request.SetRequestHeader("idempotentKey", idempotentKey);
 
