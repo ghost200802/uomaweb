@@ -16,7 +16,7 @@ public partial class GameWebApi
     public IEnumerator PurchaseUserGameItem(string gameId, string gameItemId, string gameItemItemNum, Action<ApiResponse<PurchaseUserGameItemReply>> callback)
     {
         string requestKey = GetRequestKey(nameof(PurchaseUserGameItem));
-        
+
         if (IsRequestInProgress(requestKey))
         {
             Debug.Log($"请求已在进行中: PurchaseUserGameItem");
@@ -72,7 +72,7 @@ public partial class GameWebApi
             SetRequestInProgress(requestKey, false);
             yield break;
         }
-        
+
         yield return request.SendWebRequest();
 
         try
@@ -87,7 +87,7 @@ public partial class GameWebApi
 
             Debug.Log($"响应内容: {request.downloadHandler.text}");
             var step1Response = JsonConvert.DeserializeObject<GenerateOrderPaymentAmountReply>(request.downloadHandler.text);
-            
+
             if (step1Response.Code != 200 || step1Response.Data == null)
             {
                 HandlePurchaseError(request, callback, "Step 1 Logic");
@@ -99,15 +99,15 @@ public partial class GameWebApi
         }
         catch (Exception e)
         {
-             Debug.LogError("Step 1 Process Exception: " + e);
-             callback?.Invoke(new ApiResponse<PurchaseUserGameItemReply>
-             {
-                 Code = -1,
-                 Message = e.Message
-             });
-             request.Dispose();
-             SetRequestInProgress(requestKey, false);
-             yield break;
+            Debug.LogError("Step 1 Process Exception: " + e);
+            callback?.Invoke(new ApiResponse<PurchaseUserGameItemReply>
+            {
+                Code = -1,
+                Message = e.Message
+            });
+            request.Dispose();
+            SetRequestInProgress(requestKey, false);
+            yield break;
         }
         finally
         {
@@ -185,15 +185,15 @@ public partial class GameWebApi
         }
         catch (Exception e)
         {
-             Debug.LogError("Step 2 Process Exception: " + e);
-             callback?.Invoke(new ApiResponse<PurchaseUserGameItemReply>
-             {
-                 Code = -1,
-                 Message = e.Message
-             });
-             request.Dispose();
-             SetRequestInProgress(requestKey, false);
-             yield break;
+            Debug.LogError("Step 2 Process Exception: " + e);
+            callback?.Invoke(new ApiResponse<PurchaseUserGameItemReply>
+            {
+                Code = -1,
+                Message = e.Message
+            });
+            request.Dispose();
+            SetRequestInProgress(requestKey, false);
+            yield break;
         }
         finally
         {
@@ -258,12 +258,12 @@ public partial class GameWebApi
             }
 
             Debug.Log("Purchase complete!");
-            
+
             callback?.Invoke(new ApiResponse<PurchaseUserGameItemReply>
             {
                 Code = 200,
-                Data = new PurchaseUserGameItemReply 
-                { 
+                Data = new PurchaseUserGameItemReply
+                {
                     Code = 200,
                     Data = new PurchaseUserGameItemReplyData { ShortUrl = "" }
                 }
@@ -292,15 +292,26 @@ public partial class GameWebApi
         {
             errorMessage += $" (HTTP {request.responseCode})";
         }
+
+        string reason = null;
         if (!string.IsNullOrEmpty(request.downloadHandler?.text))
         {
             errorMessage += $" Response: {request.downloadHandler.text}";
+            try
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ApiResponse<PurchaseUserGameItemReply>>(request.downloadHandler.text);
+                reason = errorResponse?.Reason;
+            }
+            catch
+            {
+            }
         }
         Debug.LogError(errorMessage);
         callback?.Invoke(new ApiResponse<PurchaseUserGameItemReply>
         {
             Code = request.responseCode > 0 ? (int)request.responseCode : -1,
-            Message = errorMessage
+            Message = errorMessage,
+            Reason = reason
         });
     }
 }

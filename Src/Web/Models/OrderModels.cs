@@ -38,6 +38,9 @@ namespace UomaWeb.Models
         [JsonProperty("code")]
         public int Code { get; set; }
 
+        [JsonProperty("reason")]
+        public string Reason { get; set; }
+
         [JsonProperty("data")]
         public GenerateOrderPaymentAmountReplyData Data { get; set; }
     }
@@ -74,6 +77,9 @@ namespace UomaWeb.Models
         [JsonProperty("code")]
         public int Code { get; set; }
 
+        [JsonProperty("reason")]
+        public string Reason { get; set; }
+
         [JsonProperty("data")]
         public CreateOrderReplyData Data { get; set; }
     }
@@ -100,7 +106,10 @@ namespace UomaWeb.Models
     {
         [JsonProperty("code")]
         public int Code { get; set; }
-        
+
+        [JsonProperty("reason")]
+        public string Reason { get; set; }
+
         [JsonProperty("data")]
         public PayOrderReplyData Data { get; set; }
     }
@@ -109,7 +118,7 @@ namespace UomaWeb.Models
     {
         [JsonProperty("status")]
         public int Status { get; set; }
-        
+
         [JsonProperty("paymentStatus")]
         public int PaymentStatus { get; set; }
     }

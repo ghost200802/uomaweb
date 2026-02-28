@@ -25,7 +25,7 @@ namespace UomaWeb
 
             return -1;
         }
-        
+
         public IEnumerator UseGameItem(string itemName, Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
             // 从配置中查找gameId和itemId
@@ -33,7 +33,7 @@ namespace UomaWeb
 
             var gameName = UomaController.Instance.GameName;
             var gameId = UomaController.Instance.GameId;
-            
+
             string itemId = null;
             string itemKey = null;
 
@@ -60,16 +60,17 @@ namespace UomaWeb
             }
 
             Debug.Log($"Before Use Item {gameName}-{itemName}-{itemId}");
-            
+
             // 使用道具
             yield return _gameWebApi.ConsumeUserGameItem(gameId, itemId, (response) =>
             {
                 if (response?.Code != 200)
                 {
+                    UomaController.Instance.ShowErrorTip(response?.Code ?? 1, response?.Reason);
                     callback?.Invoke((response?.Code ?? 1, 0, 0));
                     return;
                 }
-                
+
                 this.StartCoroutine(UpdateItemInfo(itemKey, callback));
             });
         }
@@ -79,7 +80,7 @@ namespace UomaWeb
             // 从配置中查找gameId和itemId
             var gameName = UomaController.Instance.GameName;
             var gameId = UomaController.Instance.GameId;
-            
+
             string itemId = null;
             string itemKey = null;
 
@@ -103,13 +104,34 @@ namespace UomaWeb
                 yield break;
             }
 
+            int itemPrice = GetItemPrice(itemName);
+            if (itemPrice > 0)
+            {
+                int totalPrice = itemPrice * num;
+                int playerCurrency = UomaDataManager.GetVirtualCurrency();
+                Debug.Log($"[BuyGameItem] Price check: itemPrice={itemPrice}, num={num}, totalPrice={totalPrice}, playerCurrency={playerCurrency}");
+                if (playerCurrency < totalPrice)
+                {
+                    Debug.Log($"[BuyGameItem] Insufficient balance! Showing tip...");
+                    UomaController.Instance.ShowErrorTip("USER_ORDER_VIRTUAL_CURRENCY_BALANCE_INSUFFICIENT");
+                    callback?.Invoke((0, playerCurrency, 0));
+                    yield break;
+                }
+            }
+
             // 购买道具
             yield return _gameWebApi.PurchaseUserGameItem(gameId, itemId, num.ToString(), (response) =>
             {
                 if (response?.Code != 200)
                 {
+                    UomaController.Instance.ShowErrorTip(response?.Code ?? 1, response?.Reason);
                     callback?.Invoke((response?.Code ?? 1, 0, 0));
                     return;
+                }
+
+                if (!string.IsNullOrEmpty(response?.Reason))
+                {
+                    UomaController.Instance.ShowErrorTip(response.Reason);
                 }
 
                 this.StartCoroutine(UpdateItemInfo(itemKey, callback));
@@ -120,7 +142,7 @@ namespace UomaWeb
         {
             var gameName = UomaController.Instance.GameName;
             var gameId = UomaController.Instance.GameId;
-            
+
             bool userInfoUpdated = false;
             bool gameInfoUpdated = false;
             int virtualCurrency = 0;
@@ -144,14 +166,14 @@ namespace UomaWeb
                 {
                     UomaDataManager.UpdateGameData(gameResponse.Data);
                     var gameState = UomaDataManager.GetState();
-                    if (gameState.Games.ContainsKey(gameName) && 
+                    if (gameState.Games.ContainsKey(gameName) &&
                         gameState.Games[gameName].Items.ContainsKey(itemKey))
                     {
                         itemNum = gameState.Games[gameName].Items[itemKey].GameItemItemNum;
                     }
                 }
                 gameInfoUpdated = true;
-                
+
             });
 
             // 等待所有信息更新完成
@@ -161,7 +183,7 @@ namespace UomaWeb
             }
 
             Debug.Log($"Item {gameName}-{itemKey}-{itemNum}");
-            
+
             callback?.Invoke((0, virtualCurrency, itemNum));
         }
 

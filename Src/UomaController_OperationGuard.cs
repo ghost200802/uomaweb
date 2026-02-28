@@ -18,6 +18,7 @@ namespace UomaWeb
             }
 
             _runningOperations[operationKey] = operation;
+            Debug.Log($"[OperationGuard] Operation '{operationKey}' started");
             return true;
         }
 
@@ -26,12 +27,22 @@ namespace UomaWeb
             if (_runningOperations.ContainsKey(operationKey))
             {
                 _runningOperations.Remove(operationKey);
+                Debug.Log($"[OperationGuard] Operation '{operationKey}' completed and removed");
+            }
+            else
+            {
+                Debug.LogWarning($"[OperationGuard] Operation '{operationKey}' not found in running operations");
             }
         }
 
         private bool IsOperationRunning(string operationKey)
         {
             return _runningOperations.ContainsKey(operationKey);
+        }
+
+        public bool CanStartOperation(string operationKey)
+        {
+            return !_runningOperations.ContainsKey(operationKey);
         }
     }
 }

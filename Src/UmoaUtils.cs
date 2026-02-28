@@ -5,10 +5,10 @@ public static class UomaUtils
 {
     private static readonly string _baseUrl_Ship = "https://www.uoma.com";
     private static readonly string _baseUrl_Test = "https://test.uoma.com";
-    private static string _token = "dc488b07c652ebdac8605ca5b91165cbac4cfd7e4b91c61df6badaa4e961c99864fc91f2f136b84fd09430cd7deefc9257581";
+    private static string _token = "9e88d5eac0c8d386c26f62d0547e5608f525b664c64d12334cec156125bc853a36fafbf223ff103f73e8fdc237ae702a26841";
     private static readonly string _acceptLanguage = "zh";
     private static readonly string _platform = "user";
-    private static readonly string _userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36";
+    private static readonly string _userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36";
 
     public static bool IsTestPlatform = false;
     

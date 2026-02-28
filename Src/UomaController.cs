@@ -142,14 +142,9 @@ namespace UomaWeb
         {
             string operationKey = $"Use{char.ToUpper(itemName[0]) + itemName.Substring(1)}";
 
-            if (IsOperationRunning(operationKey))
-            {
-                Debug.LogWarning($"{operationKey} operation is already in progress. Please wait.");
-                yield break;
-            }
-
             if (!TryStartOperation(operationKey, null))
             {
+                Debug.LogWarning($"{operationKey} operation is already running. Ignoring duplicate request.");
                 yield break;
             }
 
@@ -160,21 +155,21 @@ namespace UomaWeb
 
         public IEnumerator BuyGameItem(string itemName, int num, System.Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
-            string operationKey = $"Buy{char.ToUpper(itemName[0]) + itemName.Substring(1)}";
+            Debug.Log($"[UomaController] BuyGameItem called: {itemName} x {num}");
 
-            if (IsOperationRunning(operationKey))
-            {
-                Debug.LogWarning($"{operationKey} operation is already in progress. Please wait.");
-                yield break;
-            }
+            string operationKey = $"Buy{char.ToUpper(itemName[0]) + itemName.Substring(1)}";
 
             if (!TryStartOperation(operationKey, null))
             {
+                Debug.LogWarning($"{operationKey} operation is already running. Ignoring duplicate request.");
                 yield break;
             }
 
+            Debug.Log($"[UomaController] BuyGameItem started: {itemName} x {num}");
+
             yield return _gameHelper.BuyGameItem(itemName, num, callback);
 
+            Debug.Log($"[UomaController] BuyGameItem completed: {itemName}");
             CompleteOperation(operationKey);
         }
 

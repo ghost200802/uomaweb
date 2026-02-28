@@ -39,7 +39,7 @@ public partial class GameWebApi
                 GameId = gameId,
                 GameItemId = gameItemId
             };
-            
+
             var jsonBody = JsonConvert.SerializeObject(requestBody);
             byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonBody);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -52,6 +52,7 @@ public partial class GameWebApi
                 if (request.result != UnityWebRequest.Result.Success)
                 {
                     var errorMessage = $"请求失败: {request.error}";
+                    string reason = null;
                     if (request.responseCode > 0)
                     {
                         errorMessage += $" (HTTP {request.responseCode})";
@@ -60,16 +61,30 @@ public partial class GameWebApi
                     if (!string.IsNullOrEmpty(request.downloadHandler?.text))
                     {
                         errorMessage += $"响应内容: {request.downloadHandler.text}";
+                        try
+                        {
+                            var errorResponse = JsonConvert.DeserializeObject<ApiResponse<ConsumeUserGameItemReply>>(request.downloadHandler.text);
+                            reason = errorResponse?.Reason;
+                        }
+                        catch
+                        {
+                        }
                     }
 
                     Debug.LogError(errorMessage);
-                    
+
+                    callback?.Invoke(new ApiResponse<ConsumeUserGameItemReply>
+                    {
+                        Code = request.responseCode > 0 ? (int)request.responseCode : -1,
+                        Message = request.downloadHandler?.text,
+                        Reason = reason
+                    });
                     yield break;
                 }
 
                 var responseContent = request.downloadHandler.text;
                 Debug.Log($"响应内容:{responseContent}\n");
-                
+
                 callback?.Invoke(new ApiResponse<ConsumeUserGameItemReply>
                 {
                     Code = request.responseCode > 0 ? (int)request.responseCode : -1,

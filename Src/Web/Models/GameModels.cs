@@ -11,6 +11,8 @@ namespace UomaWeb.Models
         public T Data { get; set; }
         [JsonProperty("msg")]
         public string Message { get; set; }
+        [JsonProperty("reason")]
+        public string Reason { get; set; }
     }
 
     public class GameInfo
