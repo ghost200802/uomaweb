@@ -10,10 +10,10 @@ using Debug = UnityEngine.Debug;
 
 namespace UomaWeb
 {
-    public class UomaController : MonoBehaviour
+    public partial class UomaController : MonoBehaviour
     {
         public static UomaController Instance = null;
-        
+
         private GameHelper _gameHelper;
 
         [SerializeField]
@@ -21,13 +21,13 @@ namespace UomaWeb
 
         [SerializeField]
         private string gameId = "";
-        
+
         private string instanceId = "";
-        
+
         public string GameName => gameName;
-        
+
         public string GameId => gameId;
-        
+
         public string InstanceId => instanceId;
 
         private void Awake()
@@ -60,7 +60,7 @@ namespace UomaWeb
                         string afterProtocol = url.Substring(protocolIndex + 2);
                         int firstSlashIndex = afterProtocol.IndexOf('/');
                         string domain = firstSlashIndex != -1 ? afterProtocol.Substring(0, firstSlashIndex) : afterProtocol;
-                        
+
                         // 检查是否为localhost
                         if (domain == "localhost" || domain.StartsWith("localhost:"))
                         {
@@ -81,7 +81,7 @@ namespace UomaWeb
                 }
 
                 Debug.unityLogger.filterLogType = UomaUtils.IsTestPlatform ? LogType.Log : LogType.Warning;
-                
+
                 int idIndex = url.IndexOf("id=", StringComparison.OrdinalIgnoreCase);
                 if (idIndex != -1)
                 {
@@ -107,7 +107,8 @@ namespace UomaWeb
             UomaDataManager.Init();
         }
 
-        public void ReceivePlayerToken(string token) {
+        public void ReceivePlayerToken(string token)
+        {
             Debug.Log($"Received Token: {token}");
             if (!string.IsNullOrEmpty(token))
             {
@@ -119,7 +120,7 @@ namespace UomaWeb
 
         public IEnumerator GetCompleteLevel(System.Action<int> callback)
         {
-            yield return _gameHelper.GetPlayerCompleteLevel((result)=>
+            yield return _gameHelper.GetPlayerCompleteLevel((result) =>
             {
                 Debug.Log($"CompleteLevel:{result}");
                 UomaDataManager.CompleteLevel = result;
@@ -139,19 +140,49 @@ namespace UomaWeb
 
         public IEnumerator UseGameItem(string itemName, System.Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
+            string operationKey = $"Use{char.ToUpper(itemName[0]) + itemName.Substring(1)}";
+
+            if (IsOperationRunning(operationKey))
+            {
+                Debug.LogWarning($"{operationKey} operation is already in progress. Please wait.");
+                yield break;
+            }
+
+            if (!TryStartOperation(operationKey, null))
+            {
+                yield break;
+            }
+
             yield return _gameHelper.UseGameItem(itemName, callback);
+
+            CompleteOperation(operationKey);
         }
 
         public IEnumerator BuyGameItem(string itemName, int num, System.Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
+            string operationKey = $"Buy{char.ToUpper(itemName[0]) + itemName.Substring(1)}";
+
+            if (IsOperationRunning(operationKey))
+            {
+                Debug.LogWarning($"{operationKey} operation is already in progress. Please wait.");
+                yield break;
+            }
+
+            if (!TryStartOperation(operationKey, null))
+            {
+                yield break;
+            }
+
             yield return _gameHelper.BuyGameItem(itemName, num, callback);
+
+            CompleteOperation(operationKey);
         }
 
         public IEnumerator GetGameItemNum(System.Action<Dictionary<string, int>> callback)
         {
             yield return _gameHelper.GetGameItemNum(callback);
         }
-        
+
         /// <summary>
         /// 根据gameId和playerToken生成一个32位的唯一标识符
         /// </summary>
@@ -162,20 +193,20 @@ namespace UomaWeb
         {
             // 确保playerToken不为空
             string token = string.IsNullOrEmpty(playerToken) ? "default" : playerToken;
-            
+
             // 生成随机数
             System.Random random = new System.Random();
             string randomValue = random.Next(100000, 999999).ToString();
-            
+
             // 组合源字符串
             string hashSource = $"{token}_{gameId}_{randomValue}";
-            
+
             // 使用MD5生成32位哈希值
             using (var md5 = MD5.Create())
             {
                 byte[] inputBytes = Encoding.UTF8.GetBytes(hashSource);
                 byte[] hashBytes = md5.ComputeHash(inputBytes);
-                
+
                 // 将字节数组转换为32位十六进制字符串
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < hashBytes.Length; i++)

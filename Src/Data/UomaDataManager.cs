@@ -15,7 +15,7 @@ namespace UomaWeb
         private static UomaWeb.Models.GameConfig _gameConfig;
         private static UomaData _uomaState = new();
         public static int CompleteLevel { get; set; }
-        
+
         private static readonly Dictionary<string, int> _itemNums = new();
 
         public static int CurrLevel => CompleteLevel + 1;
@@ -43,7 +43,7 @@ namespace UomaWeb
         {
             return _uomaState?.Games.ContainsKey(UomaController.Instance.GameName) == true;
         }
-        
+
         public static UomaData GetState()
         {
             return _uomaState;
@@ -85,7 +85,7 @@ namespace UomaWeb
 
         public static void SetToken(string token)
         {
-            if(_uomaState.Token != null && _uomaState.Token != token)
+            if (_uomaState.Token != null && _uomaState.Token != token)
             {
                 Console.WriteLine("Token已更改");
                 InitializeUomaGameData();
@@ -95,7 +95,7 @@ namespace UomaWeb
 
         public static void UpdateItemNum(string itemKey, int num)
         {
-            if(!_itemNums.TryAdd(itemKey.ToLower(), num))
+            if (!_itemNums.TryAdd(itemKey.ToLower(), num))
             {
                 _itemNums[itemKey] = num;
             }
@@ -109,7 +109,7 @@ namespace UomaWeb
         public static void UpdateGameData(GameInfo gameInfo)
         {
             if (gameInfo == null) return;
-            
+
             var gameName = UomaController.Instance.GameName;
             var gameId = UomaController.Instance.GameId;
 
@@ -149,24 +149,25 @@ namespace UomaWeb
                         // 如果找到对应的道具key，使用它来更新数据
                         if (itemName != null)
                         {
+                            var itemNum = int.TryParse(item.GameItemItemNum, out var parsed) ? parsed : 0;
                             _uomaState.Games[gameName].Items[itemName] = new GameItemData
                             {
                                 Id = item.GameItemId,
                                 Name = itemName,
                                 IsFree = item.IsFree,
                                 VirtualCurrencyPrice = int.Parse(item.VirtualCurrencyPrice),
-                                GameItemItemNum = int.Parse(item.GameItemItemNum)
+                                GameItemItemNum = itemNum
                             };
-                            PlayerPrefs.SetInt($"{UomaController.Instance.GameName}-{itemName.ToLower()}", int.Parse(item.GameItemItemNum));
+                            PlayerPrefs.SetInt($"{UomaController.Instance.GameName}-{itemName.ToLower()}", itemNum);
                             PlayerPrefs.Save();
-                            
-                            UpdateItemNum(itemName, int.Parse(item.GameItemItemNum));
+
+                            UpdateItemNum(itemName, itemNum);
                         }
                     }
                 }
 
                 // 更新关卡数据
-                if(gameInfo.GameLevel != null)
+                if (gameInfo.GameLevel != null)
                 {
                     foreach (var level in gameInfo.GameLevel)
                     {
