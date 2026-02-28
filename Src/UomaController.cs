@@ -140,20 +140,36 @@ namespace UomaWeb
 
         public IEnumerator UseGameItem(string itemName, System.Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
+            bool completed = false;
+            StartCoroutine(UseGameItemInternal(itemName, callback, () => completed = true));
+            yield return new WaitUntil(() => completed);
+        }
+
+        private IEnumerator UseGameItemInternal(string itemName, System.Action<(int successCode, int currencyNum, int itemNum)> callback, System.Action onComplete)
+        {
             string operationKey = $"Use{char.ToUpper(itemName[0]) + itemName.Substring(1)}";
 
             if (!TryStartOperation(operationKey, null))
             {
                 Debug.LogWarning($"{operationKey} operation is already running. Ignoring duplicate request.");
+                onComplete?.Invoke();
                 yield break;
             }
 
             yield return _gameHelper.UseGameItem(itemName, callback);
 
             CompleteOperation(operationKey);
+            onComplete?.Invoke();
         }
 
         public IEnumerator BuyGameItem(string itemName, int num, System.Action<(int successCode, int currencyNum, int itemNum)> callback)
+        {
+            bool completed = false;
+            StartCoroutine(BuyGameItemInternal(itemName, num, callback, () => completed = true));
+            yield return new WaitUntil(() => completed);
+        }
+
+        private IEnumerator BuyGameItemInternal(string itemName, int num, System.Action<(int successCode, int currencyNum, int itemNum)> callback, System.Action onComplete)
         {
             Debug.Log($"[UomaController] BuyGameItem called: {itemName} x {num}");
 
@@ -162,6 +178,7 @@ namespace UomaWeb
             if (!TryStartOperation(operationKey, null))
             {
                 Debug.LogWarning($"{operationKey} operation is already running. Ignoring duplicate request.");
+                onComplete?.Invoke();
                 yield break;
             }
 
@@ -171,6 +188,7 @@ namespace UomaWeb
 
             Debug.Log($"[UomaController] BuyGameItem completed: {itemName}");
             CompleteOperation(operationKey);
+            onComplete?.Invoke();
         }
 
         public IEnumerator GetGameItemNum(System.Action<Dictionary<string, int>> callback)

@@ -28,16 +28,11 @@ namespace UomaWeb
 
         public IEnumerator UseGameItem(string itemName, Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
-            // 从配置中查找gameId和itemId
-            var gameConfig = UomaDataManager.GetState();
-
             var gameName = UomaController.Instance.GameName;
             var gameId = UomaController.Instance.GameId;
 
             string itemId = null;
             string itemKey = null;
-
-
 
             if (gameId == null)
             {
@@ -61,23 +56,35 @@ namespace UomaWeb
 
             Debug.Log($"Before Use Item {gameName}-{itemName}-{itemId}");
 
-            // 使用道具
+            bool callbackInvoked = false;
+            bool requestSucceeded = false;
+
             yield return _gameWebApi.ConsumeUserGameItem(gameId, itemId, (response) =>
             {
                 if (response?.Code != 200)
                 {
                     UomaController.Instance.ShowErrorTip(response?.Code ?? 1, response?.Reason);
                     callback?.Invoke((response?.Code ?? 1, 0, 0));
-                    return;
+                    callbackInvoked = true;
                 }
-
-                this.StartCoroutine(UpdateItemInfo(itemKey, callback));
+                else
+                {
+                    requestSucceeded = true;
+                }
             });
+
+            if (requestSucceeded)
+            {
+                yield return UpdateItemInfo(itemKey, callback);
+            }
+            else if (!callbackInvoked)
+            {
+                callback?.Invoke((1, 0, 0));
+            }
         }
 
         public IEnumerator BuyGameItem(string itemName, int num, Action<(int successCode, int currencyNum, int itemNum)> callback)
         {
-            // 从配置中查找gameId和itemId
             var gameName = UomaController.Instance.GameName;
             var gameId = UomaController.Instance.GameId;
 
@@ -119,23 +126,35 @@ namespace UomaWeb
                 }
             }
 
-            // 购买道具
+            bool callbackInvoked = false;
+            bool requestSucceeded = false;
+
             yield return _gameWebApi.PurchaseUserGameItem(gameId, itemId, num.ToString(), (response) =>
             {
                 if (response?.Code != 200)
                 {
                     UomaController.Instance.ShowErrorTip(response?.Code ?? 1, response?.Reason);
                     callback?.Invoke((response?.Code ?? 1, 0, 0));
-                    return;
+                    callbackInvoked = true;
                 }
-
-                if (!string.IsNullOrEmpty(response?.Reason))
+                else
                 {
-                    UomaController.Instance.ShowErrorTip(response.Reason);
+                    if (!string.IsNullOrEmpty(response?.Reason))
+                    {
+                        UomaController.Instance.ShowErrorTip(response.Reason);
+                    }
+                    requestSucceeded = true;
                 }
-
-                this.StartCoroutine(UpdateItemInfo(itemKey, callback));
             });
+
+            if (requestSucceeded)
+            {
+                yield return UpdateItemInfo(itemKey, callback);
+            }
+            else if (!callbackInvoked)
+            {
+                callback?.Invoke((1, 0, 0));
+            }
         }
 
         private IEnumerator UpdateItemInfo(string itemKey, Action<(int successCode, int currencyNum, int itemNum)> callback)
