@@ -3,8 +3,8 @@ using UnityEngine;
 
 public static class UomaUtils
 {
-    private static readonly string _baseUrl_Ship = "https://www.uoma.com";
-    private static readonly string _baseUrl_Test = "https://test.uoma.com";
+    private static readonly string _baseUrl_Ship = "https://api.uoma.com";
+    private static readonly string _baseUrl_Test = "https://test.api.uoma.com";
     private static string _token = "9e88d5eac0c8d386c26f62d0547e5608f525b664c64d12334cec156125bc853a36fafbf223ff103f73e8fdc237ae702a26841";
     private static readonly string _acceptLanguage = "zh";
     private static readonly string _platform = "user";
